@@ -1,5 +1,6 @@
 package at.htl.fxglprojection;
 
 public enum ObjectType {
-    PLAYER
+    TRIANGLE,
+    QUAD
 }
