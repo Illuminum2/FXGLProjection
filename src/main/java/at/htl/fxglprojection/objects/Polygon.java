@@ -8,11 +8,25 @@ import javafx.scene.paint.Color;
 
 import java.util.List;
 
-public abstract class Shape extends Component implements Vertice {
+public class Polygon extends Component implements Vertice {
+    private Point3D origin;
+    private List<Point3D> points;
+
     // https://github.com/AlmasB/FXGLGames/blob/master/Breakout/src/main/java/com/almasb/fxglgames/breakout/components/BallComponent.java
     private ObjectProperty<Color> color = new SimpleObjectProperty<>(Color.GREY);
 
-    public abstract List<Point3D> getVertice();
+    public Polygon(Point3D origin, List<Point3D> points) {
+        this.origin = origin;
+        this.points = points;
+    }
+
+    public Polygon(List<Point3D> points) {
+        this(new Point3D(), points);
+    }
+
+    public List<Point3D> getVertice() {
+        return points;
+    }
 
     public Color getColor() {
         return this.color.get();
