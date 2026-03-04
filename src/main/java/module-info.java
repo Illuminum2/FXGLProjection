@@ -5,7 +5,6 @@ module at.htl.fxglprojection {
     requires com.almasb.fxgl.all;
     requires annotations;
     requires com.almasb.fxgl.entity;
-    requires at.htl.fxglprojection;
     requires javafx.graphics;
     requires javafx.base;
 

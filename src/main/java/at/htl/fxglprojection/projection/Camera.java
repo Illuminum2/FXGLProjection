@@ -3,7 +3,7 @@ package at.htl.fxglprojection.projection;
 import org.jetbrains.annotations.Nullable;
 
 public class Camera {
-    private Position position;
+    private Point3D position;
     private Quaternion quaternion;
 
     private double[][] R;
@@ -11,7 +11,7 @@ public class Camera {
     private double focalLength;
     private double speed;
 
-    public Camera(Position p, double focalLength, double speed) {
+    public Camera(Point3D p, double focalLength, double speed) {
         this.position = p;
 
         this.quaternion = new Quaternion(1, 0, 0, 0);
@@ -23,7 +23,7 @@ public class Camera {
     }
 
     public Camera() {
-        this(new Position(), 289, 0.1);
+        this(new Point3D(), 289, 0.1);
     }
 
     @Nullable
@@ -49,11 +49,11 @@ public class Camera {
         }
     }
 
-    public void setPosition(Position p) {
+    public void setPosition(Point3D p) {
         this.position = p;
     }
 
-    public void translatePosition(Position m) {
+    public void translatePosition(Point3D m) {
         this.position.x += (this.R[0][0] * this.speed * m.x) + (this.R[0][1] * this.speed * m.y) + (this.R[0][2] * this.speed * m.z);
         this.position.y += (this.R[1][0] * this.speed * m.x) + (this.R[1][1] * this.speed * m.y) + (this.R[1][2] * this.speed * m.z);
         this.position.z += (this.R[2][0] * this.speed * m.x) + (this.R[2][1] * this.speed * m.y) + (this.R[2][2] * this.speed * m.z);
