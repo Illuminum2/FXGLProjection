@@ -7,6 +7,7 @@ module at.htl.fxglprojection {
     requires com.almasb.fxgl.entity;
     requires javafx.graphics;
     requires javafx.base;
+    requires jdk.jdi;
 
     opens at.htl.fxglprojection to javafx.fxml;
     exports at.htl.fxglprojection;
