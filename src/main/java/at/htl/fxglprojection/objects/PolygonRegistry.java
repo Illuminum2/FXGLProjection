@@ -1,7 +1,5 @@
 package at.htl.fxglprojection.objects;
 
-import com.sun.jdi.request.DuplicateRequestException;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,13 +7,13 @@ public class PolygonRegistry {
     private final static List<Polygon> polygons = new ArrayList<>();
     private static boolean hasChangedSinceRead = true;
 
-    public static void registerPolygon(Polygon p) {
+    public static void registerPolygon(Polygon p) throws DuplicatePolygonException {
         hasChangedSinceRead = true;
 
         if (!polygons.contains(p)) {
             polygons.add(p);
         } else {
-            throw new DuplicateRequestException("Polygon " + p.toString() + " is already registered.");
+            throw new DuplicatePolygonException(p);
         }
     }
 
