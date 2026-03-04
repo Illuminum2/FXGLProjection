@@ -18,6 +18,12 @@ public class Polygon extends Component implements Vertice {
     public Polygon(Point3D origin, List<Point3D> points) {
         this.origin = origin;
         this.points = points;
+
+        try {
+            PolygonRegistry.registerPolygon(this);
+        } catch (DuplicatePolygonException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public Polygon(List<Point3D> points) {
