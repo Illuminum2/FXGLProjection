@@ -26,6 +26,14 @@ public abstract class Polygon extends Component implements Vertice {
         }
     }
 
+    public Polygon(List<Point3D> points, Point3D center, int expectedVerticeCount) {
+        this(points, center);
+
+        if (points.size() != expectedVerticeCount)
+            // Get class should pass child class
+            throw new InvalidVertexCountException(getClass(), points.size(), expectedVerticeCount);
+    }
+
     public List<Point3D> getVertice() {
         return points;
     }
