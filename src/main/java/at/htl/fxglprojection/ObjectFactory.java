@@ -17,8 +17,7 @@ import java.util.regex.Pattern;
 import static at.htl.fxglprojection.ObjectType.*;
 
 public class ObjectFactory implements EntityFactory {
-    @Spawns("shape")
-    public Entity newPolygon(SpawnData data) {
+    private List<Point3D> parsePolygonData(SpawnData data) {
         // Tree map sorts by key automatically
         Map<Integer, Point3D> points = new TreeMap<>();
 
@@ -32,17 +31,19 @@ public class ObjectFactory implements EntityFactory {
             }
         });
 
-        Polygon polygon;
+        List<Point3D> pointList = points.values().stream().toList();
 
         if (data.hasKey("origin") && data.get("origin") instanceof Point3D) {
-            polygon = new Polygon(data.get("origin"), points.values().stream().toList());
-        } else {
-            polygon = new Polygon(points.values().stream().toList());
+            Point3D origin = data.get("origin");
+
+            // Normalize to origin
+            for (Point3D point : pointList) {
+                point.x += origin.x;
+                point.y += origin.y;
+                point.z += origin.z;
+            }
         }
 
-        return entityBuilder(data)
-                .type(SHAPE)
-                .with(polygon)
-                .build();
+        return pointList;
     }
 }
