@@ -16,12 +16,6 @@ public class Polygon extends Component implements Vertices {
 
     public Polygon(List<Point3D> points) {
         this.points = points;
-
-        try {
-            PolygonRegistry.registerPolygon(this);
-        } catch (DuplicatePolygonException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     public Polygon(List<Point3D> points, Color fillColor) {
@@ -39,6 +33,20 @@ public class Polygon extends Component implements Vertices {
     public Polygon(List<Point3D> points, int expectedVertexCount, Color fillColor) {
         this(points, expectedVertexCount);
         setFillColor(fillColor);
+    }
+
+    @Override
+    public void onAdded() {
+        try {
+            PolygonRegistry.register(this);
+        } catch (DuplicatePolygonException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void onRemoved() {
+        PolygonRegistry.unregister(this);
     }
 
     public List<Point3D> getVertices() {
