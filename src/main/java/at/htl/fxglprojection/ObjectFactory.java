@@ -17,6 +17,16 @@ import java.util.regex.Pattern;
 import static at.htl.fxglprojection.ObjectType.*;
 
 public class ObjectFactory implements EntityFactory {
+    @Spawns("polygon")
+    public Entity newPolygon(SpawnData data) {
+        Polygon polygon = new Polygon(parsePolygonData(data));
+
+        return entityBuilder(data)
+                .type(SHAPE)
+                .with(polygon)
+                .build();
+    }
+
     private List<Point3D> parsePolygonData(SpawnData data) {
         // Tree map sorts by key automatically
         Map<Integer, Point3D> points = new TreeMap<>();
