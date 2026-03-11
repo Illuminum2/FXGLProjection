@@ -8,16 +8,16 @@ import javafx.scene.paint.Color;
 
 import java.util.List;
 
-public abstract class Polygon extends Component implements Vertice {
+public abstract class Polygon extends Component implements Vertices {
     private List<Point3D> points;
     private Point3D center;
 
     // https://github.com/AlmasB/FXGLGames/blob/master/Breakout/src/main/java/com/almasb/fxglgames/breakout/components/BallComponent.java
     private ObjectProperty<Color> color = new SimpleObjectProperty<>(Color.GREY);
 
-    public Polygon(List<Point3D> points, Point3D center) {
+    public Polygon(List<Point3D> points) {
         this.points = points;
-        this.center = center;
+        this.center = calculateCenter(points);
 
         try {
             PolygonRegistry.registerPolygon(this);
@@ -26,12 +26,11 @@ public abstract class Polygon extends Component implements Vertice {
         }
     }
 
-    public Polygon(List<Point3D> points, Point3D center, int expectedVerticeCount) {
-        this(points, center);
+    public Polygon(List<Point3D> points, int expectedVertexCount) {
+        if (points.size() != expectedVertexCount)
+            throw new InvalidVertexCountException(points.size(), expectedVertexCount);
 
-        if (points.size() != expectedVerticeCount)
-            // Get class should pass child class
-            throw new InvalidVertexCountException(getClass(), points.size(), expectedVerticeCount);
+        this(points);
     }
 
     protected abstract Point3D calculateCenter(List<Point3D> points);
