@@ -5,10 +5,13 @@ import java.util.List;
 
 public class PolygonRegistry {
     private final static List<Polygon> polygons = new ArrayList<>();
-    private static boolean hasChangedSinceRead = true;
+    private static boolean changedSinceRead = true;
 
-    public static void registerPolygon(Polygon p) throws DuplicatePolygonException {
-        hasChangedSinceRead = true;
+    public static void register(Polygon p) throws DuplicatePolygonException {
+        changedSinceRead = true;
+
+        if (p == null)
+            throw new NullPointerException("Attempted to register null polygon");
 
         if (!polygons.contains(p)) {
             polygons.add(p);
@@ -17,23 +20,18 @@ public class PolygonRegistry {
         }
     }
 
-    public static boolean unregisterPolygon(Polygon p) {
-        hasChangedSinceRead = true;
+    public static boolean unregister(Polygon p) {
+        changedSinceRead = true;
 
-        if (polygons.contains(p)) {
-            polygons.remove(p);
-            return true;
-        } else {
-            return false;
-        }
+        return polygons.remove(p);
     }
 
     public static List<Polygon> getRegistered() {
-        hasChangedSinceRead = false;
+        changedSinceRead = false;
         return polygons;
     }
 
-    public static boolean isHasChangedSinceRead() {
-        return hasChangedSinceRead;
+    public static boolean changedSinceRead() {
+        return changedSinceRead;
     }
 }
