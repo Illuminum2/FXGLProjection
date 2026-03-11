@@ -34,7 +34,9 @@ public abstract class Polygon extends Component implements Vertice {
             throw new InvalidVertexCountException(getClass(), points.size(), expectedVerticeCount);
     }
 
-    public List<Point3D> getVertice() {
+    protected abstract Point3D calculateCenter(List<Point3D> points);
+
+    public List<Point3D> getVertices() {
         return points;
     }
 
