@@ -24,11 +24,21 @@ public class Polygon extends Component implements Vertices {
         }
     }
 
+    public Polygon(List<Point3D> points, Color fillColor) {
+        this(points);
+        setFillColor(fillColor);
+    }
+
     public Polygon(List<Point3D> points, int expectedVertexCount) {
         if (points.size() != expectedVertexCount)
             throw new InvalidVertexCountException(points.size(), expectedVertexCount);
 
         this(points);
+    }
+
+    public Polygon(List<Point3D> points, int expectedVertexCount, Color fillColor) {
+        this(points, expectedVertexCount);
+        setFillColor(fillColor);
     }
 
     public List<Point3D> getVertices() {
