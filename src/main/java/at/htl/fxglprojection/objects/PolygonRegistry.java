@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PolygonRegistry {
-    private final static List<Polygon> polygons = new ArrayList<>();
+    private final static List<Polygon3DComponent> polygons = new ArrayList<>();
     private static boolean changedSinceRead = true;
 
-    public static void register(Polygon p) throws DuplicatePolygonException {
+    public static void register(Polygon3DComponent p) throws DuplicatePolygonException {
         changedSinceRead = true;
 
         if (p == null)
@@ -20,13 +20,13 @@ public class PolygonRegistry {
         }
     }
 
-    public static boolean unregister(Polygon p) {
+    public static boolean unregister(Polygon3DComponent p) {
         changedSinceRead = true;
 
         return polygons.remove(p);
     }
 
-    public static List<Polygon> getRegistered() {
+    public static List<Polygon3DComponent> getRegistered() {
         changedSinceRead = false;
         return polygons;
     }

@@ -2,7 +2,7 @@ package at.htl.fxglprojection;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 
-import at.htl.fxglprojection.objects.Polygon;
+import at.htl.fxglprojection.objects.Polygon3DComponent;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.EntityFactory;
 import com.almasb.fxgl.entity.SpawnData;
@@ -19,7 +19,7 @@ import static at.htl.fxglprojection.ObjectType.*;
 public class ObjectFactory implements EntityFactory {
     @Spawns("polygon")
     public Entity newPolygon(SpawnData data) {
-        Polygon polygon = new Polygon(parsePolygonData(data));
+        Polygon3DComponent polygon = new Polygon3DComponent(parsePolygonData(data));
 
         return entityBuilder(data)
                 .type(SHAPE)

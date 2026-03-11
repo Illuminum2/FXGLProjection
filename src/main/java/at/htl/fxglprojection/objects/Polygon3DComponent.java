@@ -8,29 +8,29 @@ import javafx.scene.paint.Color;
 
 import java.util.List;
 
-public class Polygon extends Component implements Vertices {
+public class Polygon3DComponent extends Component implements Vertices {
     private List<Point3D> points;
 
     // https://github.com/AlmasB/FXGLGames/blob/master/Breakout/src/main/java/com/almasb/fxglgames/breakout/components/BallComponent.java
     private ObjectProperty<Color> fillColor = new SimpleObjectProperty<>(Color.GREY);
 
-    public Polygon(List<Point3D> points) {
+    public Polygon3DComponent(List<Point3D> points) {
         this.points = points;
     }
 
-    public Polygon(List<Point3D> points, Color fillColor) {
+    public Polygon3DComponent(List<Point3D> points, Color fillColor) {
         this(points);
         setFillColor(fillColor);
     }
 
-    public Polygon(List<Point3D> points, int expectedVertexCount) {
+    public Polygon3DComponent(List<Point3D> points, int expectedVertexCount) {
         if (points.size() != expectedVertexCount)
             throw new InvalidVertexCountException(points.size(), expectedVertexCount);
 
         this(points);
     }
 
-    public Polygon(List<Point3D> points, int expectedVertexCount, Color fillColor) {
+    public Polygon3DComponent(List<Point3D> points, int expectedVertexCount, Color fillColor) {
         this(points, expectedVertexCount);
         setFillColor(fillColor);
     }
