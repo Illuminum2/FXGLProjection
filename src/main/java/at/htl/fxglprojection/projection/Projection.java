@@ -3,11 +3,11 @@ package at.htl.fxglprojection.projection;
 import org.jetbrains.annotations.Nullable;
 
 public class Projection {
-    public Camera camera;
+    public Camera3DProjection camera;
     private double[][] R;
 
     public Projection() {
-        this.camera = new Camera();
+        this.camera = new Camera3DProjection();
         this.R = new double[][] {{ 1, 0, 0 }, { 0, 1, 0 }, { 0, 0, 1 }};
     }
 
