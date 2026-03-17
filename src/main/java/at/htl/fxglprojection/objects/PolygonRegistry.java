@@ -1,6 +1,7 @@
 package at.htl.fxglprojection.objects;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class PolygonRegistry {
@@ -28,7 +29,9 @@ public class PolygonRegistry {
 
     public static List<Polygon3DComponent> getRegistered() {
         changedSinceRead = false;
-        return polygons;
+
+        // https://www.baeldung.com/java-immutable-list
+        return Collections.unmodifiableList(polygons);
     }
 
     public static boolean changedSinceRead() {
