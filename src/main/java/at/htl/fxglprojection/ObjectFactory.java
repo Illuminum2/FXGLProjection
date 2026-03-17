@@ -37,7 +37,7 @@ public class ObjectFactory implements EntityFactory {
             Matcher m = r.matcher(key);
 
             if (value instanceof Point3D && m.matches()) {
-                points.put(Integer.getInteger(m.group(0)), (Point3D) value);
+                points.put(Integer.parseInt(m.group(1)), (Point3D) value);
             }
         });
 
