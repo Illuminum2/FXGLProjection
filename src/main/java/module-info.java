@@ -11,4 +11,6 @@ module at.htl.fxglprojection {
 
     opens at.htl.fxglprojection to javafx.fxml;
     exports at.htl.fxglprojection;
+    exports at.htl.fxglprojection.renderer;
+    opens at.htl.fxglprojection.renderer to javafx.fxml;
 }

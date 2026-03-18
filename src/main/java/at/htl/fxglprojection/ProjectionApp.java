@@ -1,18 +1,19 @@
 package at.htl.fxglprojection;
 
 import at.htl.fxglprojection.projection.Camera3DProjection;
+import at.htl.fxglprojection.renderer.RenderService;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 
 public class ProjectionApp extends GameApplication {
-    private Camera3DProjection camera;
-
     @Override
     protected void initSettings(GameSettings settings) {
         settings.setWidth(800);
         settings.setHeight(600);
         settings.setTitle("Projection");
         settings.setVersion("0.1");
+
+        settings.addEngineService(RenderService.class);
     }
 
     @Override

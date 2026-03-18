@@ -2,13 +2,13 @@ package at.htl.fxglprojection.renderer;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.jetbrains.annotations.Nullable;
 
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Polygon;
 import com.almasb.fxgl.core.EngineService;
-import com.almasb.fxgl.app.scene.GameScene;
 import static com.almasb.fxgl.dsl.FXGL.getGameScene;
 
 import at.htl.fxglprojection.objects.Polygon3DComponent;
@@ -18,27 +18,15 @@ import at.htl.fxglprojection.projection.Camera3DProjection;
 
 public class RenderService extends EngineService {
     private final Pane renderLayer = new Pane();
-
-    private final HashMap<Polygon3DComponent, Polygon> polygonNodes = new HashMap<>();
+    private final Map<Polygon3DComponent, Polygon> polygonNodes = new HashMap<>();
 
     private Camera3DProjection camera;
 
-    //    @Override
-    //    public void onMainLoopStarting() {
-    //        renderLayer = new Pane();
-    //        renderLayer.setPrefSize(FXGL.getAppWidth(), FXGL.getAppHeight());
-    //        //renderLayer.setMouseTransparent(true);
-    //        FXGL.addUINode(renderLayer);
-    //
-    //        camera = new Camera3DProjection();
-    //    }
-
     @Override
     public void onInit() {
-        GameScene scene = getGameScene(); // Get core game scene directly from FXGL
-        scene.getGameRoot().add(renderLayer);
-
         renderLayer.setMouseTransparent(true);
+
+        getGameScene().getContentRoot().getChildren().add(renderLayer);
     }
 
     @Override
@@ -54,16 +42,17 @@ public class RenderService extends EngineService {
     @Override
     public void onExit() {
         renderLayer.getChildren().clear();
+        getGameScene().getContentRoot().getChildren().remove(renderLayer);
         polygonNodes.clear();
     }
 
-    @Nullable
-    private ProjectedPolygon projectPolygon(Polygon3DComponent poly3D) {
-    }
-
-    private void syncNodes(List<Polygon3DComponent> allPolygons) {
-    }
-
-    private void updateFxPolygon(javafx.scene.shape.Polygon fxPoly, ProjectedPolygon pp) {
-    }
+//    @Nullable
+//    private ProjectedPolygon projectPolygon(Polygon3DComponent poly3D) {
+//    }
+//
+//    private void syncNodes(List<Polygon3DComponent> allPolygons) {
+//    }
+//
+//    private void updateFxPolygon(javafx.scene.shape.Polygon fxPoly, ProjectedPolygon pp) {
+//    }
 }
