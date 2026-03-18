@@ -24,15 +24,18 @@ public class Polygon3DComponent extends Component implements Vertices {
     }
 
     public Polygon3DComponent(List<Point3D> points, int expectedVertexCount) {
-        if (points.size() != expectedVertexCount)
-            throw new InvalidVertexCountException(points.size(), expectedVertexCount);
-
-        this(points);
+        this(validate(points, expectedVertexCount));
     }
 
     public Polygon3DComponent(List<Point3D> points, int expectedVertexCount, Color fillColor) {
-        this(points, expectedVertexCount);
-        setFillColor(fillColor);
+        this(validate(points, expectedVertexCount), fillColor);
+    }
+
+    private static List<Point3D> validate(List<Point3D> points, int expected) {
+        if (points.size() != expected) {
+            throw new InvalidVertexCountException(points.size(), expected);
+        }
+        return points;
     }
 
     @Override
