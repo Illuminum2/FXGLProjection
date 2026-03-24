@@ -1,7 +1,7 @@
 package at.htl.fxglprojection.objects;
 
-import at.htl.fxglprojection.projection.Point3D;
-import com.almasb.fxgl.entity.component.Component;
+import java.util.List;
+
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.paint.Color;
@@ -16,6 +16,12 @@ public class Polygon3D implements Vertices {
 
     public Polygon3D(List<Vec3D> points) {
         this.points = points;
+
+        try {
+            PolygonRegistry.register(this);
+        } catch (DuplicatePolygonException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public Polygon3D(List<Vec3D> points, Color fillColor) {
@@ -38,14 +44,7 @@ public class Polygon3D implements Vertices {
         return points;
     }
 
-    @Override
-    public void onAdded() {
-        try {
-            PolygonRegistry.register(this);
-        } catch (DuplicatePolygonException e) {
-            throw new RuntimeException(e);
-        }
-    }
+    public void unregister() { PolygonRegistry.unregister(this); }
 
     public List<Vec3D> getVertices() {
         return points;
