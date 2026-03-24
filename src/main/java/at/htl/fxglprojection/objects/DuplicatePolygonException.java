@@ -1,14 +1,14 @@
 package at.htl.fxglprojection.objects;
 
 public class DuplicatePolygonException extends Exception {
-    private final Polygon3DComponent p;
+    private final Polygon3D p;
 
-    public DuplicatePolygonException(Polygon3DComponent p) {
+    public DuplicatePolygonException(Polygon3D p) {
         super("Polygon " + p.toString() + " is already registered");
         this.p = p;
     }
 
-    public Polygon3DComponent getPolygon() {
+    public Polygon3D getPolygon() {
         return p;
     }
 }

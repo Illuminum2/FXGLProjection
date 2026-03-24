@@ -3,7 +3,7 @@ package at.htl.fxglprojection.projection;
 import org.jetbrains.annotations.Nullable;
 
 public class Camera3DProjection {
-    private Point3D position;
+    private Vec3D position;
     private Quaternion quaternion;
 
     private double[][] R;
@@ -11,7 +11,7 @@ public class Camera3DProjection {
     private double focalLength;
     private double speed;
 
-    public Camera3DProjection(Point3D p, double focalLength, double speed) {
+    public Camera3DProjection(Vec3D p, double focalLength, double speed) {
         this.position = p;
 
         this.quaternion = new Quaternion(1, 0, 0, 0);
@@ -23,11 +23,11 @@ public class Camera3DProjection {
     }
 
     public Camera3DProjection() {
-        this(new Point3D(), 289, 0.1);
+        this(new Vec3D(), 289, 0.1);
     }
 
     @Nullable
-    public Point2D projectPoint(Point3D p) {
+    public Vec2D projectPoint(Vec3D p) {
         double P1x = p.x - this.position.x;
         double P1y = p.y - this.position.y;
         double P1z = p.z - this.position.z;
@@ -39,7 +39,7 @@ public class Camera3DProjection {
         double P2z = (R_inv[2][0]*P1x) + (R_inv[2][1]*P1y) + (R_inv[2][2]*P1z);
 
         if (P2z > 0) {
-            return new Point2D(
+            return new Vec2D(
                     this.focalLength * P2x / P2z,
                     this.focalLength * P2y / P2z
             );
@@ -49,11 +49,11 @@ public class Camera3DProjection {
         }
     }
 
-    public void setPosition(Point3D p) {
+    public void setPosition(Vec3D p) {
         this.position = p;
     }
 
-    public void translatePosition(Point3D m) {
+    public void translatePosition(Vec3D m) {
         this.position.x += (this.R[0][0] * this.speed * m.x) + (this.R[0][1] * this.speed * m.y) + (this.R[0][2] * this.speed * m.z);
         this.position.y += (this.R[1][0] * this.speed * m.x) + (this.R[1][1] * this.speed * m.y) + (this.R[1][2] * this.speed * m.z);
         this.position.z += (this.R[2][0] * this.speed * m.x) + (this.R[2][1] * this.speed * m.y) + (this.R[2][2] * this.speed * m.z);

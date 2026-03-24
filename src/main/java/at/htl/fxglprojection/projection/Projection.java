@@ -12,7 +12,7 @@ public class Projection {
     }
 
     @Nullable
-    public Point2D projectPoint(Point3D p) {
+    public Vec2D projectPoint(Vec3D p) {
         double P1x = p.x - this.camera.getX();
         double P1y = p.y - this.camera.getY();
         double P1z = p.z - this.camera.getZ();
@@ -24,7 +24,7 @@ public class Projection {
         double P2z = (R_inv[2][0]*P1x) + (R_inv[2][1]*P1y) + (R_inv[2][2]*P1z);
 
         if (P2z > 0) {
-            return new Point2D(
+            return new Vec2D(
                     this.camera.getFocalLength() * P2x / P2z,
                     this.camera.getFocalLength() * P2y / P2z
             );
