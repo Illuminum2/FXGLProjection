@@ -16,12 +16,6 @@ public class Polygon3D implements Vertices {
 
     public Polygon3D(List<Vec3D> points) {
         this.points = points;
-
-        try {
-            PolygonRegistry.register(this);
-        } catch (DuplicatePolygonException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     public Polygon3D(List<Vec3D> points, Color fillColor) {
@@ -43,8 +37,6 @@ public class Polygon3D implements Vertices {
         }
         return points;
     }
-
-    public void unregister() { PolygonRegistry.unregister(this); }
 
     public List<Vec3D> getVertices() {
         return points;

@@ -5,13 +5,13 @@ import java.util.List;
 import com.almasb.fxgl.entity.component.Component;
 
 public class Mesh3DComponent extends Component  {
-    private final List<Polygon3D> polygons;
+    private final MeshData mesh;
 
-    public Mesh3DComponent(List<Polygon3D> polygons) {
-        this.polygons = List.copyOf(polygons);
+    public Mesh3DComponent(MeshData mesh) {
+        this.mesh = mesh;
     }
 
-    public List<Polygon3D> getPolygons() {
-        return polygons;
+    public MeshData getMesh() {
+        return mesh;
     }
 }

@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class PolygonRegistry {
-    private final static List<Polygon3D> polygons = new ArrayList<>();
-    private static boolean changedSinceRead = true;
+public class MeshData {
+    private final List<Polygon3D> polygons = new ArrayList<>();
+    private boolean changedSinceRead = true;
 
-    public static void register(Polygon3D p) throws DuplicatePolygonException {
+    public void register(Polygon3D p) throws DuplicatePolygonException {
         changedSinceRead = true;
 
         if (p == null)
@@ -21,20 +21,20 @@ public class PolygonRegistry {
         }
     }
 
-    public static boolean unregister(Polygon3D p) {
+    public boolean unregister(Polygon3D p) {
         changedSinceRead = true;
 
         return polygons.remove(p);
     }
 
-    public static List<Polygon3D> getRegistered() {
+    public List<Polygon3D> getRegistered() {
         changedSinceRead = false;
 
         // https://www.baeldung.com/java-immutable-list
         return Collections.unmodifiableList(polygons);
     }
 
-    public static boolean changedSinceRead() {
+    public boolean changedSinceRead() {
         return changedSinceRead;
     }
 }
