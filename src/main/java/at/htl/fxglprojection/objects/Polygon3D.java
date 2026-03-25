@@ -1,5 +1,6 @@
 package at.htl.fxglprojection.objects;
 
+import java.util.Collections;
 import java.util.List;
 
 import javafx.beans.property.ObjectProperty;
@@ -41,7 +42,7 @@ public class Polygon3D implements Vertices {
     }
 
     public List<Vec3D> getVertices() {
-        return points;
+        return Collections.unmodifiableList(points);
     }
 
     public Color getFillColor() {
