@@ -21,10 +21,20 @@ public class MeshData {
         }
     }
 
+    public void register(List<Polygon3D> polygons) throws DuplicatePolygonException {
+        for (Polygon3D polygon : polygons)
+            register(polygon);
+    }
+
     public boolean unregister(Polygon3D p) {
         changedSinceRead = true;
 
         return polygons.remove(p);
+    }
+
+    public void unregister(List<Polygon3D> polygons) {
+        for (Polygon3D polygon : polygons)
+            unregister(polygon);
     }
 
     public List<Polygon3D> getRegistered() {
