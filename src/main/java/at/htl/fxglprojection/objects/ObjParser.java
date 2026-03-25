@@ -49,7 +49,7 @@ public class ObjParser {
                         String[] indices = tokens[i].split("//"); // Escaping is redundant
 
                         if (indices.length == 2)
-                            throw new DataFormatException("Obj face is not correctly formatted");
+                            throw new DataFormatException("Obj face is not correctly formatted.");
 
                         if (i == 2)
                             faceNormal = normals.get(Integer.parseInt(indices[1]) - 1); // Normals use 1-indexing
@@ -59,8 +59,10 @@ public class ObjParser {
 
                     Polygon3D face = new Polygon3D(facePoints, faceNormal);
                     faces.add(face);
+                } else if (tokens[0].equals("o")) {
+                    throw new DataFormatException("Obj file contains object definitions, this is not supported.");
                 } else if (!tokens[0].equals("vt") && !tokens[0].equals("g")){
-                    throw new DataFormatException("Obj file is not correctly structured");
+                    throw new DataFormatException("Obj file is not correctly structured.");
                 }
             } catch (NumberFormatException e) {
                 throw new DataFormatException(e.getMessage());
