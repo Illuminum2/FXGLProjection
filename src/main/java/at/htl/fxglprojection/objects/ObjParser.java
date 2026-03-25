@@ -11,6 +11,7 @@ import java.util.zip.DataFormatException;
 
 public class ObjParser {
     // https://nullprogram.com/blog/2025/03/02/
+    // https://www.scratchapixel.com/lessons/3d-basic-rendering/obj-file-format/obj-file-format.html
     public static MeshData parseFile(File file) throws IOException, DataFormatException {
         FileReader fr = new FileReader(file);
 
@@ -54,7 +55,7 @@ public class ObjParser {
                         if (i == 2)
                             faceNormal = normals.get(Integer.parseInt(indices[1]) - 1); // Normals use 1-indexing
 
-                        facePoints.add(points.get(Integer.parseInt(indices[0]))); // Vertices use 0-indexing
+                        facePoints.add(points.get(Integer.parseInt(indices[0]) - 1)); // Vertices use 1-indexing
                     }
 
                     Polygon3D face = new Polygon3D(facePoints, faceNormal);
