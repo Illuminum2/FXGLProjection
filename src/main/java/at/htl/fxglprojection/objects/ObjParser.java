@@ -46,14 +46,13 @@ public class ObjParser {
                     List<Vec3D> facePoints = new ArrayList<>();
                     Vec3D faceNormal = new Vec3D(); // Only one normal per face because rendering only works with flat polygons; initialized to make compiler shut up
 
-                    for (int i = 1; i < tokens.length; i++) {
+                    for (int i = tokens.length - 1; i > 0; i--) {
                         String[] indices = tokens[i].split("/"); // Escaping is redundant
 
                         if (indices.length != 3)
                             throw new DataFormatException("Obj face is not correctly formatted.");
 
-                        if (i == 2)
-                            faceNormal = normals.get(Integer.parseInt(indices[2]) - 1); // Normals use 1-indexing
+                        faceNormal = normals.get(Integer.parseInt(indices[2]) - 1); // Normals use 1-indexing
 
                         facePoints.add(points.get(Integer.parseInt(indices[0]) - 1)); // Vertices use 1-indexing
                     }
@@ -75,7 +74,7 @@ public class ObjParser {
         try {
             meshData.register(faces);
         } catch (DuplicatePolygonException e) {
-            throw new DataFormatException("Obj file contains duplicate vertices");
+            throw new DataFormatException("Obj file contains duplicate vertices.");
         }
 
         return meshData;
