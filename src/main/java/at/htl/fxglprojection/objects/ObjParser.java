@@ -14,8 +14,6 @@ public class ObjParser {
     public static MeshData parseFile(File file) throws IOException, DataFormatException {
         FileReader fr = new FileReader(file);
 
-        int state = 0;
-
         List<Vec3D> points = new ArrayList<>();
         List<Vec3D> normals = new ArrayList<>();
         List<Polygon3D> faces = new ArrayList<>();
@@ -27,7 +25,7 @@ public class ObjParser {
             String[] tokens = l.split("\\s+");
 
             try {
-                if (tokens[0].equals("v") && tokens.length == 4 && state == 0) {
+                if (tokens[0].equals("v") && tokens.length == 4) {
                     Vec3D p = new Vec3D(
                             Double.parseDouble(tokens[1]),
                             Double.parseDouble(tokens[2]),
@@ -35,10 +33,7 @@ public class ObjParser {
                     );
 
                     points.add(p);
-                } else if (tokens[0].equals("vn") && tokens.length == 4 && state <= 1) {
-                    if (state != 1)
-                        state = 1;
-
+                } else if (tokens[0].equals("vn") && tokens.length == 4) {
                     Vec3D n = new Vec3D(
                             Double.parseDouble(tokens[1]),
                             Double.parseDouble(tokens[2]),
@@ -47,9 +42,6 @@ public class ObjParser {
 
                     normals.add(n);
                 } else if (tokens[0].equals("f") && tokens.length >= 4) {
-                    if (state != 2)
-                        state = 2;
-
                     List<Vec3D> facePoints = new ArrayList<>();
                     Vec3D faceNormal = new Vec3D(); // Only one normal per face because rendering only works with flat polygons; initialized to make compiler shut up
 
