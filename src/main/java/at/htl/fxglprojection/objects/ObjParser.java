@@ -59,7 +59,7 @@ public class ObjParser {
 
                     Polygon3D face = new Polygon3D(facePoints, faceNormal);
                     faces.add(face);
-                } else if (!tokens[0].equals("vt")){
+                } else if (!tokens[0].equals("vt") && !tokens[0].equals("g")){
                     throw new DataFormatException("Obj file is not correctly structured");
                 }
             } catch (NumberFormatException e) {
