@@ -52,9 +52,17 @@ public class ObjParser {
                         if (indices.length != 3)
                             throw new DataFormatException("Obj face is not correctly formatted.");
 
-                        faceNormal = normals.get(Integer.parseInt(indices[2]) - 1); // Normals use 1-indexing
+                        int normalIndex = Integer.parseInt(indices[2]) - 1; // Normals use 1-indexing
+                        if (normalIndex < 0)
+                            normalIndex += normals.size() + 1;
 
-                        facePoints.add(points.get(Integer.parseInt(indices[0]) - 1)); // Vertices use 1-indexing
+                        faceNormal = normals.get(normalIndex);
+
+                        int pointIndex = Integer.parseInt(indices[0]) - 1;
+                        if (pointIndex < 0)
+                            pointIndex += normals.size() + 1;
+
+                        facePoints.add(points.get(pointIndex)); // Vertices use 1-indexing
                     }
 
                     Polygon3D face = new Polygon3D(facePoints, faceNormal);
