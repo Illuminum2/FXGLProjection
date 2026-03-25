@@ -20,7 +20,7 @@ public class ObjParser {
         List<Polygon3D> faces = new ArrayList<>();
 
         for (String l : fr.readAllLines()) {
-            if (l.isBlank())
+            if (l.isBlank() || l.charAt(0) == '#')
                 continue;
 
             String[] tokens = l.split("\\s+");
