@@ -45,6 +45,10 @@ public class Polygon3D implements Vertices {
         return Collections.unmodifiableList(points);
     }
 
+    public Vec3D getNormal() {
+        return normal;
+    }
+
     public Color getFillColor() {
         return this.fillColor.get();
     }
