@@ -25,55 +25,16 @@ public class ObjParser {
 
             String[] tokens = l.split("\\s+");
 
-            try {
-                if (tokens[0].equals("v") && tokens.length == 4) {
-                    Vec3D p = new Vec3D(
-                            Double.parseDouble(tokens[1]),
-                            Double.parseDouble(tokens[2]),
-                            Double.parseDouble(tokens[3])
-                    );
-
-                    vertices.add(p);
-                } else if (tokens[0].equals("vn") && tokens.length == 4) {
-                    Vec3D n = new Vec3D(
-                            Double.parseDouble(tokens[1]),
-                            Double.parseDouble(tokens[2]),
-                            Double.parseDouble(tokens[3])
-                    );
-
-                    normals.add(n);
-                } else if (tokens[0].equals("f") && tokens.length >= 4) {
-                    List<Vec3D> faceVertices = new ArrayList<>();
-                    Vec3D faceNormal = new Vec3D(); // Only one normal per face because rendering only works with flat polygons; initialized to make compiler shut up
-
-                    for (int i = tokens.length - 1; i > 0; i--) {
-                        String[] indices = tokens[i].split("/"); // Escaping is redundant
-
-                        if (indices.length != 3)
-                            throw new DataFormatException("Obj face is not correctly formatted.");
-
-                        int normalIndex = Integer.parseInt(indices[2]) - 1; // Normals use 1-indexing
-                        if (normalIndex < 0)
-                            normalIndex += normals.size() + 1;
-
-                        faceNormal = normals.get(normalIndex);
-
-                        int verticesIndex = Integer.parseInt(indices[0]) - 1; // Vertices use 1-indexing
-                        if (verticesIndex < 0)
-                            verticesIndex += normals.size() + 1;
-
-                        faceVertices.add(vertices.get(verticesIndex));
-                    }
-
-                    Polygon3D face = new Polygon3D(faceVertices, faceNormal);
-                    faces.add(face);
-                } else if (tokens[0].equals("o")) {
-                    throw new DataFormatException("Obj file contains object definitions, this is not supported.");
-                } else if (!tokens[0].equals("vt") && !tokens[0].equals("g")){
-                    throw new DataFormatException("Obj file is not correctly structured.");
-                }
-            } catch (NumberFormatException e) {
-                throw new DataFormatException(e.getMessage());
+            if (tokens[0].equals("v")) {
+                vertices.add(parseVertex(tokens));
+            } else if (tokens[0].equals("vn")) {
+                normals.add(parseNormal(tokens));
+            } else if (tokens[0].equals("f")) {
+                faces.add(parseFace(tokens, vertices, normals));
+            } else if (tokens[0].equals("o")) {
+                throw new DataFormatException("Obj: File contains unsupported object definitions.");
+            } else if (!tokens[0].equals("vt") && !tokens[0].equals("g")){
+                throw new DataFormatException("Obj: File is not correctly structured.");
             }
         }
 
@@ -86,5 +47,68 @@ public class ObjParser {
         }
 
         return meshData;
+    }
+
+    private static Vec3D parseVertex(String[] tokens) throws DataFormatException {
+        if (tokens.length != 4)
+            throw new DataFormatException("Obj: Malformed vertex definition.");
+
+        try {
+            return new Vec3D(
+                    Double.parseDouble(tokens[1]),
+                    Double.parseDouble(tokens[2]),
+                    Double.parseDouble(tokens[3])
+            );
+        } catch (NumberFormatException e) {
+            throw new DataFormatException("Obj: Invalid numeric format in vertex definition.");
+        }
+    }
+
+    private static Vec3D parseNormal(String[] tokens) throws DataFormatException {
+        if (tokens.length != 4)
+            throw new DataFormatException("Obj: Malformed normal definition.");
+
+        try {
+            return new Vec3D(
+                    Double.parseDouble(tokens[1]),
+                    Double.parseDouble(tokens[2]),
+                    Double.parseDouble(tokens[3])
+            );
+        } catch (NumberFormatException e) {
+            throw new DataFormatException("Obj: Invalid numeric format in normal definition.");
+        }
+    }
+
+    private static Polygon3D parseFace(String[] tokens, List<Vec3D> vertices, List<Vec3D> normals) throws DataFormatException {
+        if (tokens.length >= 4)
+            throw new DataFormatException("Obj: Malformed face definition.");
+
+        List<Vec3D> faceVertices = new ArrayList<>();
+        Vec3D faceNormal = new Vec3D(); // Only one normal per face because rendering only works with flat polygons; initialized to make compiler shut up
+
+        try {
+            for (int i = tokens.length - 1; i > 0; i--) {
+                String[] indices = tokens[i].split("/"); // Escaping is redundant
+
+                if (indices.length != 3)
+                    throw new DataFormatException("Obj: Malformed face definition.");
+
+                int normalIndex = Integer.parseInt(indices[2]) - 1; // Normals use 1-indexing
+                if (normalIndex < 0)
+                    normalIndex += normals.size() + 1;
+
+                faceNormal = normals.get(normalIndex);
+
+                int verticesIndex = Integer.parseInt(indices[0]) - 1; // Vertices use 1-indexing
+                if (verticesIndex < 0)
+                    verticesIndex += normals.size() + 1;
+
+                faceVertices.add(vertices.get(verticesIndex));
+            }
+        } catch (NumberFormatException e) {
+            throw new DataFormatException("Obj: Invalid numeric format in face definition.");
+        }
+
+        return new Polygon3D(faceVertices, faceNormal);
     }
 }
