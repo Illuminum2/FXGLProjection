@@ -15,7 +15,7 @@ public class ObjParser {
     public static MeshData parseFile(File file) throws IOException, DataFormatException {
         FileReader fr = new FileReader(file);
 
-        List<Vec3D> points = new ArrayList<>();
+        List<Vec3D> vertices = new ArrayList<>();
         List<Vec3D> normals = new ArrayList<>();
         List<Polygon3D> faces = new ArrayList<>();
 
@@ -33,7 +33,7 @@ public class ObjParser {
                             Double.parseDouble(tokens[3])
                     );
 
-                    points.add(p);
+                    vertices.add(p);
                 } else if (tokens[0].equals("vn") && tokens.length == 4) {
                     Vec3D n = new Vec3D(
                             Double.parseDouble(tokens[1]),
@@ -43,7 +43,7 @@ public class ObjParser {
 
                     normals.add(n);
                 } else if (tokens[0].equals("f") && tokens.length >= 4) {
-                    List<Vec3D> facePoints = new ArrayList<>();
+                    List<Vec3D> faceVertices = new ArrayList<>();
                     Vec3D faceNormal = new Vec3D(); // Only one normal per face because rendering only works with flat polygons; initialized to make compiler shut up
 
                     for (int i = tokens.length - 1; i > 0; i--) {
@@ -58,14 +58,14 @@ public class ObjParser {
 
                         faceNormal = normals.get(normalIndex);
 
-                        int pointIndex = Integer.parseInt(indices[0]) - 1;
-                        if (pointIndex < 0)
-                            pointIndex += normals.size() + 1;
+                        int verticesIndex = Integer.parseInt(indices[0]) - 1; // Vertices use 1-indexing
+                        if (verticesIndex < 0)
+                            verticesIndex += normals.size() + 1;
 
-                        facePoints.add(points.get(pointIndex)); // Vertices use 1-indexing
+                        faceVertices.add(vertices.get(verticesIndex));
                     }
 
-                    Polygon3D face = new Polygon3D(facePoints, faceNormal);
+                    Polygon3D face = new Polygon3D(faceVertices, faceNormal);
                     faces.add(face);
                 } else if (tokens[0].equals("o")) {
                     throw new DataFormatException("Obj file contains object definitions, this is not supported.");
