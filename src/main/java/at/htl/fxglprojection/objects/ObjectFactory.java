@@ -1,4 +1,4 @@
-package at.htl.fxglprojection;
+package at.htl.fxglprojection.objects;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,7 +10,6 @@ import com.almasb.fxgl.entity.Spawns;
 import com.almasb.fxgl.entity.SpawnData;
 
 import at.htl.fxglprojection.projection.Vec3D;
-import at.htl.fxglprojection.objects.*;
 
 public class ObjectFactory implements EntityFactory {
     @Spawns("objObject")
