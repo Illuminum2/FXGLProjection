@@ -17,13 +17,13 @@ public class MeshData {
         if (!polygons.contains(p)) {
             polygons.add(p);
         } else {
-            throw new DuplicatePolygonException(p);
+            throw new DuplicatePolygonException(p.toString());
         }
     }
 
     public void register(List<Polygon3D> polygons) throws DuplicatePolygonException {
-        for (Polygon3D polygon : polygons)
-            register(polygon);
+        for (Polygon3D p : polygons)
+            register(p);
     }
 
     public boolean unregister(Polygon3D p) {
@@ -33,8 +33,8 @@ public class MeshData {
     }
 
     public void unregister(List<Polygon3D> polygons) {
-        for (Polygon3D polygon : polygons)
-            unregister(polygon);
+        for (Polygon3D p : polygons)
+            unregister(p);
     }
 
     public List<Polygon3D> getRegistered() {
