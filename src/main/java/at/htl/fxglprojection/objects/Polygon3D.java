@@ -11,7 +11,7 @@ import at.htl.fxglprojection.projection.Vec3D;
 
 public class Polygon3D implements Vertices {
     private List<Vec3D> points;
-    private Vec3D normal;
+    private Vec3D normal; // Only one normal vector because polygon must be flat
 
     // https://github.com/AlmasB/FXGLGames/blob/master/Breakout/src/main/java/com/almasb/fxglgames/breakout/components/BallComponent.java
     private ObjectProperty<Color> fillColor = new SimpleObjectProperty<>(Color.GREY);
