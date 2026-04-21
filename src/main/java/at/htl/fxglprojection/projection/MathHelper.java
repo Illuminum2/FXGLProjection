@@ -25,6 +25,15 @@ public class MathHelper {
         return new Quaternion(q.w / length, q.x / length, q.y / length, q.z / length);
     }
 
+    // https://math.stackexchange.com/questions/40164/how-do-you-rotate-a-vector-by-a-unit-quaternion
+    public static Vec3D vectorQuaternionRotation(Vec3D v, Quaternion q) {
+        Quaternion v_q = new Quaternion(0, v.x, v.y, v.z);
+        Quaternion q_conj = new Quaternion(q.w,-1 * q.x,-1 * q.y,-1 * q.z);
+        Quaternion q_temp = quaternionMultiply(quaternionMultiply(q, v_q),q_conj);
+
+        return new Vec3D(q_temp.x, q_temp.y, q_temp.z);
+    }
+
     // Matrix
 
     public static double[][] matrixTranspose(double[][] matrix) {
