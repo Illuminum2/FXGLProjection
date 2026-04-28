@@ -6,7 +6,7 @@ import com.almasb.fxgl.entity.component.Required;
 @Required(Transform3DComponent.class)
 public class Mesh3DComponent extends Component {
     // Injected by FXGL
-    private Transform3DComponent transform3DComponent;
+    public Transform3DComponent transform3DComponent;
 
     private final MeshData meshData;
 
