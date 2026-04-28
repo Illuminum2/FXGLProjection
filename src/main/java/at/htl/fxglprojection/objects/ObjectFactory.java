@@ -14,7 +14,7 @@ import at.htl.fxglprojection.projection.Vec3D;
 public class ObjectFactory implements EntityFactory {
     @Spawns("objObject")
     public Entity spawnObj(SpawnData spawnData) {
-        File objFile = new File((String) spawnData.get("filename"));
+        File objFile = new File((String) spawnData.get("filepath"));
         MeshData meshData;
 
         try {
