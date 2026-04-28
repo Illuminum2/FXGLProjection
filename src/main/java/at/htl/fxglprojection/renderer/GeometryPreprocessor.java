@@ -9,7 +9,7 @@ import at.htl.fxglprojection.projection.Quaternion;
 import at.htl.fxglprojection.projection.Vec3D;
 
 public class GeometryPreprocessor {
-    public static List<MeshData> preprocess() throws DuplicatePolygonException {
+    public static List<MeshData> preprocess() {
         List<MeshData> mesh_processed = new ArrayList<>();
 
         for (Mesh3DComponent meshComp : ObjectRegistry.getRegistered()) {
@@ -27,7 +27,9 @@ public class GeometryPreprocessor {
                 Vec3D n_processed = MathHelper.vectorQuaternionRotation(p.getNormal(), transform.getRotationQuat());
 
                 Polygon3D processedPolygon = new Polygon3D(v_processed, n_processed, p.getFillColor());
-                meshData_processed.register(processedPolygon);
+                try {
+                    meshData_processed.register(processedPolygon);
+                } catch (DuplicatePolygonException _) {}
             }
 
             mesh_processed.add(meshData_processed);
