@@ -1,7 +1,7 @@
 package at.htl.fxglprojection.projection;
 
 public class Quaternion {
-    public double w = 0;
+    public double w = 1;
     public double x = 0;
     public double y = 0;
     public double z = 0;
