@@ -109,7 +109,7 @@ public class ObjParser {
 
                 int verticesIndex = Integer.parseInt(indices[0]) - 1; // Vertices use 1-indexing
                 if (verticesIndex < 0)
-                    verticesIndex += normals.size() + 1;
+                    verticesIndex += vertices.size() + 1;
 
                 faceVertices.add(vertices.get(verticesIndex));
             }
