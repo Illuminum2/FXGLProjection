@@ -18,23 +18,32 @@ public class ObjParser {
         List<Vec3D> normals = new ArrayList<>();
         List<Polygon3D> faces = new ArrayList<>();
 
+        int line = 1;
+
         for (String l : fr.readAllLines()) {
             if (l.isBlank() || l.charAt(0) == '#')
                 continue;
 
             String[] tokens = l.split("\\s+");
 
-            if (tokens[0].equals("v")) {
-                vertices.add(parseVertex(tokens));
-            } else if (tokens[0].equals("vn")) {
-                normals.add(parseNormal(tokens));
-            } else if (tokens[0].equals("f")) {
-                faces.add(parseFace(tokens, vertices, normals));
-            } else if (tokens[0].equals("o")) {
-                throw new ObjFormatException("File contains unsupported object definitions.");
-            } else if (!tokens[0].equals("vt") && !tokens[0].equals("g")){
-                throw new ObjFormatException("Malformed line.");
+            try {
+                if (tokens[0].equals("v")) {
+                    vertices.add(parseVertex(tokens));
+                } else if (tokens[0].equals("vn")) {
+                    normals.add(parseNormal(tokens));
+                } else if (tokens[0].equals("f")) {
+                    faces.add(parseFace(tokens, vertices, normals));
+                } else if (tokens[0].equals("o")) {
+                    throw new ObjFormatException("File contains unsupported object definitions.");
+                } else if (!tokens[0].equals("vt") && !tokens[0].equals("g")) {
+                    throw new ObjFormatException("Malformed line.");
+                }
+            } catch (ObjFormatException e) {
+                e.setLine(line);
+                throw e;
             }
+
+            line++;
         }
 
         MeshData meshData = new MeshData();
