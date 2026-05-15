@@ -23,6 +23,10 @@ public class RenderService extends EngineService {
 
     private final Camera3DProjection camera = new Camera3DProjection();
 
+    public Camera3DProjection getCamera() {
+        return camera;
+    }
+
     @Override
     public void onInit() {
         renderLayer.setMouseTransparent(true);
