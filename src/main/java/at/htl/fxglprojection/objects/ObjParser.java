@@ -21,6 +21,8 @@ public class ObjParser {
         int line = 1;
 
         for (String l : fr.readAllLines()) {
+            line++;
+
             if (l.isBlank() || l.charAt(0) == '#')
                 continue;
 
@@ -42,8 +44,6 @@ public class ObjParser {
                 e.setLine(line);
                 throw e;
             }
-
-            line++;
         }
 
         MeshData meshData = new MeshData();
