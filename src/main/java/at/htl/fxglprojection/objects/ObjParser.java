@@ -23,6 +23,7 @@ public class ObjParser {
         for (String l : fr.readAllLines()) {
             line++;
 
+            l = l.trim();
             if (l.isBlank() || l.charAt(0) == '#')
                 continue;
 
