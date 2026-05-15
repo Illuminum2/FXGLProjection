@@ -95,7 +95,7 @@ public class ObjParser {
         Vec3D faceNormal = new Vec3D(); // Only one normal per face because rendering only works with flat polygons; initialized to make compiler shut up
 
         try {
-            for (int i = tokens.length - 1; i > 0; i--) {
+            for (int i = 1; i < tokens.length; i++) {
                 String[] indices = tokens[i].split("/"); // Escaping is redundant
 
                 if (indices.length != 3)
