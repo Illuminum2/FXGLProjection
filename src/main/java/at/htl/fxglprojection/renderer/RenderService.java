@@ -88,6 +88,7 @@ public class RenderService extends EngineService {
 
     private void syncNodes(List<ProjectedPolygon> polygons) {
         Set<Polygon3D> visiblePolygons = new HashSet<>();
+        List<Polygon> sortedNodes = new ArrayList<>();
 
         for (ProjectedPolygon projectedPolygon : polygons) {
             Polygon fxPoly = polygonNodes.get(projectedPolygon.getSource());
@@ -100,6 +101,7 @@ public class RenderService extends EngineService {
 
             updateFxPolygon(fxPoly, projectedPolygon);
             visiblePolygons.add(projectedPolygon.getSource());
+            sortedNodes.add(fxPoly);
         }
 
         // Remove old/out of view polygons
@@ -110,11 +112,14 @@ public class RenderService extends EngineService {
             renderLayer.getChildren().remove(p.getValue());
             return true;
         });
+
+        renderLayer.getChildren().setAll(sortedNodes);
     }
 
     private void updateFxPolygon(Polygon fxPoly, ProjectedPolygon pp) {
         fxPoly.getPoints().setAll(pp.getPoints());
-        fxPoly.setFill(pp.getSource().getFillColor());
+        //fxPoly.setFill(pp.getSource().getFillColor());
+        fxPoly.setFill(Color.rgb(Math.abs((int) (pp.getSource().getNormal().x * 255)),Math.abs((int) (pp.getSource().getNormal().y * 255)), Math.abs((int) (pp.getSource().getNormal().z * 255))));
         fxPoly.setStrokeWidth(2);
     }
 }
