@@ -13,6 +13,7 @@ import at.htl.fxglprojection.projection.Camera3DProjection;
 
 public class ProjectionApp extends GameApplication {
     private final double CAMERA_MOVE_SPEED = 20;
+    private final double CAMERA_ROTATION_SPEED = 1.5;
 
     @Override
     protected void initSettings(GameSettings settings) {
@@ -44,6 +45,11 @@ public class ProjectionApp extends GameApplication {
         FXGL.onKey(KeyCode.D, () -> camera.translatePosition(new Vec3D(CAMERA_MOVE_SPEED, 0, 0)));
         FXGL.onKey(KeyCode.Q, () -> camera.translatePosition(new Vec3D(0, CAMERA_MOVE_SPEED, 0)));
         FXGL.onKey(KeyCode.E, () -> camera.translatePosition(new Vec3D(0, -CAMERA_MOVE_SPEED, 0)));
+
+        FXGL.onKey(KeyCode.UP, () -> camera.rotateView(-CAMERA_ROTATION_SPEED, new double[]{1, 0, 0}));
+        FXGL.onKey(KeyCode.DOWN, () -> camera.rotateView(CAMERA_ROTATION_SPEED, new double[]{1, 0, 0}));
+        FXGL.onKey(KeyCode.LEFT, () -> camera.rotateView(-CAMERA_ROTATION_SPEED, new double[]{0, 1, 0}));
+        FXGL.onKey(KeyCode.RIGHT, () -> camera.rotateView(CAMERA_ROTATION_SPEED, new double[]{0, 1, 0}));
     }
 
     static void main(String[] args) {
