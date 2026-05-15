@@ -101,16 +101,10 @@ public class ObjParser {
                 if (indices.length != 3)
                     throw new ObjFormatException("Malformed face definition.");
 
-                int normalIndex = Integer.parseInt(indices[2]) - 1; // Normals use 1-indexing
-                if (normalIndex < 0)
-                    normalIndex += normals.size() + 1;
-
+                int normalIndex = parseObjIndex(indices[2], normals.size());
                 faceNormal = normals.get(normalIndex);
 
-                int verticesIndex = Integer.parseInt(indices[0]) - 1; // Vertices use 1-indexing
-                if (verticesIndex < 0)
-                    verticesIndex += vertices.size() + 1;
-
+                int verticesIndex = parseObjIndex(indices[0], vertices.size());
                 faceVertices.add(vertices.get(verticesIndex));
             }
         } catch (NumberFormatException e) {
@@ -118,5 +112,20 @@ public class ObjParser {
         }
 
         return new Polygon3D(faceVertices, faceNormal);
+    }
+
+    private static int parseObjIndex(String token, int size) throws ObjFormatException {
+        int index = Integer.parseInt(token) - 1; // Vertices and faces use 1-indexing
+
+        if (index == -1)
+            throw new ObjFormatException("Zero index in obj definition.");
+
+        if (index < 0)
+            index += size + 1;
+
+        if (index < 0 || index >= size)
+            throw new ObjFormatException("Out-of-bounds index in obj definition.");
+
+        return index;
     }
 }
