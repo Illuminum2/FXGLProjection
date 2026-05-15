@@ -80,6 +80,7 @@ public class Camera3DProjection {
         );
 
         this.quaternion = MathHelper.quaternionNormalize(MathHelper.quaternionMultiply(this.quaternion, deltaQ));
+        this.R = MathHelper.quaternionToMatrix(this.quaternion);
     }
 
     public double getX() {
