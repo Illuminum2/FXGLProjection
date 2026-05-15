@@ -16,7 +16,7 @@ public class ObjFormatException extends Exception {
     @Override
     public String getMessage() {
         if (line != null)
-            return line.toString() + ": " + message;
+            return "Line " + line.toString() + ": " + message;
 
         return message;
     }
