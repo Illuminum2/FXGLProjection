@@ -43,10 +43,10 @@ public class ProjectionApp extends GameApplication {
         FXGL.onKey(KeyCode.Q, () -> camera.translatePosition(new Vec3D(0, 1, 0)));
         FXGL.onKey(KeyCode.E, () -> camera.translatePosition(new Vec3D(0, -1, 0)));
 
-        FXGL.onKey(KeyCode.UP, () -> camera.rotateView(new double[]{-1, 0, 0}));
-        FXGL.onKey(KeyCode.DOWN, () -> camera.rotateView(new double[]{1, 0, 0}));
-        FXGL.onKey(KeyCode.LEFT, () -> camera.rotateView(new double[]{0, -1, 0}));
-        FXGL.onKey(KeyCode.RIGHT, () -> camera.rotateView(new double[]{0, 1, 0}));
+        FXGL.onKey(KeyCode.UP, () -> camera.rotateView(new Vec3D(-1, 0, 0)));
+        FXGL.onKey(KeyCode.DOWN, () -> camera.rotateView(new Vec3D(1, 0, 0)));
+        FXGL.onKey(KeyCode.LEFT, () -> camera.rotateView(new Vec3D(0, -1, 0)));
+        FXGL.onKey(KeyCode.RIGHT, () -> camera.rotateView(new Vec3D(0, 1, 0)));
     }
 
     static void main(String[] args) {

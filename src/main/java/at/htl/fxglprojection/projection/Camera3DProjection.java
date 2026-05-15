@@ -66,20 +66,20 @@ public class Camera3DProjection {
         this.position.z += (this.R[2][0] * speed * m.x) + (this.R[2][1] * speed * m.y) + (this.R[2][2] * speed * m.z);
     }
 
-    public void rotateView(double[] axis) {
+    public void rotateView(Vec3D axis) {
         rotateView(this.rotationSpeed, axis);
     }
 
-    public void rotateView(double deltaAngleDegrees, double[] axis) {
+    public void rotateView(double deltaAngleDegrees, Vec3D axis) {
         // Fix: Rotation is now relative to camera space not to world space
         // Transform world space axis to camera space axis by multiplying with the rotation matrix
         // https://en.wikipedia.org/wiki/Change_of_basis#Example
         // https://en.wikipedia.org/wiki/Rotation_matrix
 
         double[] cameraAxis = new double[] {
-                this.R[0][0] * axis[0] + this.R[0][1] * axis[1] + this.R[0][2] * axis[2],
-                this.R[1][0] * axis[0] + this.R[1][1] * axis[1] + this.R[1][2] * axis[2],
-                this.R[2][0] * axis[0] + this.R[2][1] * axis[1] + this.R[2][2] * axis[2]
+                this.R[0][0] * axis.x + this.R[0][1] * axis.y + this.R[0][2] * axis.z,
+                this.R[1][0] * axis.x + this.R[1][1] * axis.y + this.R[1][2] * axis.z,
+                this.R[2][0] * axis.x + this.R[2][1] * axis.y + this.R[2][2] * axis.z
         };
 
         double deltaAngle = (deltaAngleDegrees * Math.PI / 180) / 2;
