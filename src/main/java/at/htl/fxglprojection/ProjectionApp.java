@@ -1,6 +1,6 @@
 package at.htl.fxglprojection;
 
-import at.htl.fxglprojection.renderer.RenderService;
+import at.htl.fxglprojection.renderer.TempRenderService;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 
@@ -12,7 +12,7 @@ public class ProjectionApp extends GameApplication {
         settings.setTitle("Projection");
         settings.setVersion("0.1");
 
-        settings.addEngineService(RenderService.class);
+        settings.addEngineService(TempRenderService.class);
     }
 
     @Override
