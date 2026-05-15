@@ -88,8 +88,8 @@ public class ObjParser {
     }
 
     private static Polygon3D parseFace(String[] tokens, List<Vec3D> vertices, List<Vec3D> normals) throws ObjFormatException {
-        //if (tokens.length >= 4)
-        //    throw new ObjFormatException("Malformed face definition.");
+        if (tokens.length >= 4)
+            throw new ObjFormatException("Malformed face definition.");
 
         List<Vec3D> faceVertices = new ArrayList<>();
         Vec3D faceNormal = new Vec3D(); // Only one normal per face because rendering only works with flat polygons; initialized to make compiler shut up
