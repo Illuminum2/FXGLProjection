@@ -4,6 +4,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
+import javafx.scene.paint.Color;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Polygon;
 import com.almasb.fxgl.dsl.FXGL;
@@ -11,13 +12,14 @@ import com.almasb.fxgl.core.EngineService;
 import static com.almasb.fxgl.dsl.FXGL.getGameScene;
 
 import at.htl.fxglprojection.objects.*;
-import at.htl.fxglprojection.projection.Vec2D;
 import at.htl.fxglprojection.projection.Vec3D;
 import at.htl.fxglprojection.projection.Camera3DProjection;
 
 // Rendering for planar non-intersecting polygons
 
 public class RenderService extends EngineService {
+    private boolean initialized = false;
+
     private final Pane renderLayer = new Pane();
     private final Map<Polygon3D, Polygon> polygonNodes = new HashMap<>();
 
@@ -29,6 +31,10 @@ public class RenderService extends EngineService {
 
     @Override
     public void onInit() {
+        if (initialized)
+            throw new IllegalStateException("RenderService already initialized.");
+        initialized = true;
+
         renderLayer.setMouseTransparent(true);
 
         getGameScene().getContentRoot().getChildren().add(renderLayer);
@@ -47,6 +53,8 @@ public class RenderService extends EngineService {
             }
         }
 
+        projectedPolygons.sort(Comparator.comparingDouble(ProjectedPolygon::getDepth).reversed());
+
         syncNodes(projectedPolygons);
     }
 
@@ -55,23 +63,27 @@ public class RenderService extends EngineService {
         renderLayer.getChildren().clear();
         getGameScene().getContentRoot().getChildren().remove(renderLayer);
         polygonNodes.clear();
+
+        initialized = false;
     }
 
     @Nullable
     private ProjectedPolygon projectPolygon(Polygon3D poly3D) {
         List<Double> points = new ArrayList<>();
+        Double depth = 0.0;
 
         for (Vec3D vertex : poly3D.getVertices()) {
-            Vec2D projectedPoint = camera.projectPoint(vertex);
+            Vec3D projectedPoint = camera.projectPoint(vertex);
 
             if (projectedPoint == null)
                 return null; // Fixes issue with polygons partially behind camera still getting rendered
 
             points.add(FXGL.getAppWidth() / 2.0 + projectedPoint.x); // Convert camera-plane x to screen x
             points.add(FXGL.getAppHeight() / 2.0 - projectedPoint.y); // Convert camera-plane y to screen y with y-axis pointing up
+            depth += projectedPoint.z;
         }
 
-        return new ProjectedPolygon(poly3D, points);
+        return new ProjectedPolygon(poly3D, points, depth / (points.size() /2));
     }
 
     private void syncNodes(List<ProjectedPolygon> polygons) {
@@ -100,7 +112,7 @@ public class RenderService extends EngineService {
         });
     }
 
-    private void updateFxPolygon(javafx.scene.shape.Polygon fxPoly, ProjectedPolygon pp) {
+    private void updateFxPolygon(Polygon fxPoly, ProjectedPolygon pp) {
         fxPoly.getPoints().setAll(pp.getPoints());
         fxPoly.setFill(pp.getSource().getFillColor());
         fxPoly.setStrokeWidth(2);

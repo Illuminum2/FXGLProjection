@@ -27,7 +27,7 @@ public class Camera3DProjection {
     }
 
     @Nullable
-    public Vec2D projectPoint(Vec3D p) {
+    public Vec3D projectPoint(Vec3D p) {
         double P1x = p.x - this.position.x;
         double P1y = p.y - this.position.y;
         double P1z = p.z - this.position.z;
@@ -39,9 +39,10 @@ public class Camera3DProjection {
         double P2z = (R_inv[2][0]*P1x) + (R_inv[2][1]*P1y) + (R_inv[2][2]*P1z);
 
         if (P2z > 0) {
-            return new Vec2D(
+            return new Vec3D(
                     this.focalLength * P2x / P2z,
-                    this.focalLength * P2y / P2z
+                    this.focalLength * P2y / P2z,
+                    P2z
             );
         }
         else {

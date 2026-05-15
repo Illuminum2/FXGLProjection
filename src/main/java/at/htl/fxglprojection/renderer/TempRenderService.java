@@ -83,7 +83,7 @@ public class TempRenderService extends EngineService {
                 boolean behindCamera = false;
 
                 for (Vec3D vertex : vertices) {
-                    Vec2D projectedPoint = camera.projectPoint(vertex);
+                    Vec3D projectedPoint = camera.projectPoint(vertex);
 
                     if (projectedPoint == null) {
                         behindCamera = true;
