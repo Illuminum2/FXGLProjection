@@ -47,6 +47,8 @@ public class ObjParser {
             }
         }
 
+        fr.close();
+
         MeshData meshData = new MeshData();
 
         try {
