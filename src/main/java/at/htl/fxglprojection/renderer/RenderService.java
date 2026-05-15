@@ -53,7 +53,7 @@ public class RenderService extends EngineService {
             }
         }
 
-        projectedPolygons.sort(Comparator.comparingDouble(ProjectedPolygon::getDepth).reversed());
+        projectedPolygons.sort(Comparator.comparingDouble(ProjectedPolygon::depth).reversed());
 
         syncNodes(projectedPolygons);
     }
@@ -70,7 +70,7 @@ public class RenderService extends EngineService {
     @Nullable
     private ProjectedPolygon projectPolygon(Polygon3D poly3D) {
         List<Double> points = new ArrayList<>();
-        Double depth = 0.0;
+        double depth = 0.0;
 
         for (Vec3D vertex : poly3D.getVertices()) {
             Vec3D projectedPoint = camera.projectPoint(vertex);
@@ -91,16 +91,16 @@ public class RenderService extends EngineService {
         List<Polygon> sortedNodes = new ArrayList<>();
 
         for (ProjectedPolygon projectedPolygon : polygons) {
-            Polygon fxPoly = polygonNodes.get(projectedPolygon.getSource());
+            Polygon fxPoly = polygonNodes.get(projectedPolygon.source());
 
             if (fxPoly == null) {
                 fxPoly = new Polygon();
-                polygonNodes.put(projectedPolygon.getSource(), fxPoly);
+                polygonNodes.put(projectedPolygon.source(), fxPoly);
                 renderLayer.getChildren().add(fxPoly);
             }
 
             updateFxPolygon(fxPoly, projectedPolygon);
-            visiblePolygons.add(projectedPolygon.getSource());
+            visiblePolygons.add(projectedPolygon.source());
             sortedNodes.add(fxPoly);
         }
 
@@ -117,9 +117,9 @@ public class RenderService extends EngineService {
     }
 
     private void updateFxPolygon(Polygon fxPoly, ProjectedPolygon pp) {
-        fxPoly.getPoints().setAll(pp.getPoints());
+        fxPoly.getPoints().setAll(pp.points());
         //fxPoly.setFill(pp.getSource().getFillColor());
-        fxPoly.setFill(Color.rgb(Math.abs((int) (pp.getSource().getNormal().x * 255)),Math.abs((int) (pp.getSource().getNormal().y * 255)), Math.abs((int) (pp.getSource().getNormal().z * 255))));
+        fxPoly.setFill(Color.rgb(Math.abs((int) (pp.source().getNormal().x * 255)),Math.abs((int) (pp.source().getNormal().y * 255)), Math.abs((int) (pp.source().getNormal().z * 255))));
         fxPoly.setStrokeWidth(2);
     }
 }

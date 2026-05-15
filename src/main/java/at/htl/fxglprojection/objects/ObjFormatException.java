@@ -1,7 +1,7 @@
 package at.htl.fxglprojection.objects;
 
 public class ObjFormatException extends Exception {
-    private String message;
+    private final String message;
     private Integer line;
 
     public ObjFormatException(String message) {
@@ -16,7 +16,7 @@ public class ObjFormatException extends Exception {
     @Override
     public String getMessage() {
         if (line != null)
-            return "Line " + line.toString() + ": " + message;
+            return "Line " + line + ": " + message;
 
         return message;
     }

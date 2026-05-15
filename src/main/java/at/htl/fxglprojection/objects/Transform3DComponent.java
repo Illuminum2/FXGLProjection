@@ -1,8 +1,5 @@
 package at.htl.fxglprojection.objects;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.almasb.fxgl.entity.component.Component;
 
 import at.htl.fxglprojection.projection.Quaternion;
@@ -13,7 +10,7 @@ public final class Transform3DComponent extends Component {
     private Quaternion rotationQuat = new Quaternion();
     private Vec3D scale = new Vec3D(1, 1, 1);
 
-    private boolean[] changesSinceRead = new boolean[]{true, true, true};
+    private final boolean[] changesSinceRead = new boolean[]{true, true, true};
 
     public Vec3D getPosition() {
         changesSinceRead[0] = false;
@@ -43,9 +40,6 @@ public final class Transform3DComponent extends Component {
     }
 
     public boolean changedSinceRead() {
-        if (changesSinceRead[0] || changesSinceRead[1] || changesSinceRead[2])
-            return true;
-
-        return false;
+        return changesSinceRead[0] || changesSinceRead[1] || changesSinceRead[2];
     }
 }
