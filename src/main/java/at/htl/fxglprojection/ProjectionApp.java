@@ -12,9 +12,6 @@ import at.htl.fxglprojection.renderer.RenderService;
 import at.htl.fxglprojection.projection.Camera3DProjection;
 
 public class ProjectionApp extends GameApplication {
-    private final double CAMERA_MOVE_SPEED = 20;
-    private final double CAMERA_ROTATION_SPEED = 1.5;
-
     @Override
     protected void initSettings(GameSettings settings) {
         settings.setWidth(800);
@@ -39,17 +36,17 @@ public class ProjectionApp extends GameApplication {
     protected void initInput() {
         Camera3DProjection camera = FXGL.getService(RenderService.class).getCamera();
 
-        FXGL.onKey(KeyCode.W, () -> camera.translatePosition(new Vec3D(0, 0, CAMERA_MOVE_SPEED)));
-        FXGL.onKey(KeyCode.S, () -> camera.translatePosition(new Vec3D(0, 0, -CAMERA_MOVE_SPEED)));
-        FXGL.onKey(KeyCode.A, () -> camera.translatePosition(new Vec3D(-CAMERA_MOVE_SPEED, 0, 0)));
-        FXGL.onKey(KeyCode.D, () -> camera.translatePosition(new Vec3D(CAMERA_MOVE_SPEED, 0, 0)));
-        FXGL.onKey(KeyCode.Q, () -> camera.translatePosition(new Vec3D(0, CAMERA_MOVE_SPEED, 0)));
-        FXGL.onKey(KeyCode.E, () -> camera.translatePosition(new Vec3D(0, -CAMERA_MOVE_SPEED, 0)));
+        FXGL.onKey(KeyCode.W, () -> camera.translatePosition(new Vec3D(0, 0, 1)));
+        FXGL.onKey(KeyCode.S, () -> camera.translatePosition(new Vec3D(0, 0, -1)));
+        FXGL.onKey(KeyCode.A, () -> camera.translatePosition(new Vec3D(-1, 0, 0)));
+        FXGL.onKey(KeyCode.D, () -> camera.translatePosition(new Vec3D(1, 0, 0)));
+        FXGL.onKey(KeyCode.Q, () -> camera.translatePosition(new Vec3D(0, 1, 0)));
+        FXGL.onKey(KeyCode.E, () -> camera.translatePosition(new Vec3D(0, -1, 0)));
 
-        FXGL.onKey(KeyCode.UP, () -> camera.rotateView(-CAMERA_ROTATION_SPEED, new double[]{1, 0, 0}));
-        FXGL.onKey(KeyCode.DOWN, () -> camera.rotateView(CAMERA_ROTATION_SPEED, new double[]{1, 0, 0}));
-        FXGL.onKey(KeyCode.LEFT, () -> camera.rotateView(-CAMERA_ROTATION_SPEED, new double[]{0, 1, 0}));
-        FXGL.onKey(KeyCode.RIGHT, () -> camera.rotateView(CAMERA_ROTATION_SPEED, new double[]{0, 1, 0}));
+        FXGL.onKey(KeyCode.UP, () -> camera.rotateView(new double[]{-1, 0, 0}));
+        FXGL.onKey(KeyCode.DOWN, () -> camera.rotateView(new double[]{1, 0, 0}));
+        FXGL.onKey(KeyCode.LEFT, () -> camera.rotateView(new double[]{0, -1, 0}));
+        FXGL.onKey(KeyCode.RIGHT, () -> camera.rotateView(new double[]{0, 1, 0}));
     }
 
     static void main(String[] args) {

@@ -9,9 +9,10 @@ public class Camera3DProjection {
     private double[][] R;
 
     private double focalLength;
-    private double speed;
+    private double movementSpeed;
+    private double rotationSpeed;
 
-    public Camera3DProjection(Vec3D p, double focalLength, double speed) {
+    public Camera3DProjection(Vec3D p, double focalLength, double movementSpeed, double rotationSpeed) {
         this.position = p;
 
         this.quaternion = new Quaternion(1, 0, 0, 0);
@@ -19,11 +20,12 @@ public class Camera3DProjection {
         this.R = new double[][] {{ 1, 0, 0 }, { 0, 1, 0 }, { 0, 0, 1 }};
 
         this.focalLength = focalLength;
-        this.speed = speed;
+        this.movementSpeed = movementSpeed;
+        this.rotationSpeed = rotationSpeed;
     }
 
     public Camera3DProjection() {
-        this(new Vec3D(), 289, 0.1);
+        this(new Vec3D(), 289, 2, 1.5);
     }
 
     @Nullable
@@ -55,9 +57,17 @@ public class Camera3DProjection {
     }
 
     public void translatePosition(Vec3D m) {
-        this.position.x += (this.R[0][0] * this.speed * m.x) + (this.R[0][1] * this.speed * m.y) + (this.R[0][2] * this.speed * m.z);
-        this.position.y += (this.R[1][0] * this.speed * m.x) + (this.R[1][1] * this.speed * m.y) + (this.R[1][2] * this.speed * m.z);
-        this.position.z += (this.R[2][0] * this.speed * m.x) + (this.R[2][1] * this.speed * m.y) + (this.R[2][2] * this.speed * m.z);
+        translatePosition(this.movementSpeed, m);
+    }
+
+    public void translatePosition(double speed, Vec3D m) {
+        this.position.x += (this.R[0][0] * speed * m.x) + (this.R[0][1] * speed * m.y) + (this.R[0][2] * speed * m.z);
+        this.position.y += (this.R[1][0] * speed * m.x) + (this.R[1][1] * speed * m.y) + (this.R[1][2] * speed * m.z);
+        this.position.z += (this.R[2][0] * speed * m.x) + (this.R[2][1] * speed * m.y) + (this.R[2][2] * speed * m.z);
+    }
+
+    public void rotateView(double[] axis) {
+        rotateView(this.rotationSpeed, axis);
     }
 
     public void rotateView(double deltaAngleDegrees, double[] axis) {
@@ -101,4 +111,14 @@ public class Camera3DProjection {
     public double getFocalLength() {
         return this.focalLength;
     }
+
+    public double getMovementSpeed() { return this.movementSpeed; }
+
+    public double getRotationSpeed() { return this.rotationSpeed; }
+
+    public void setFocalLength(double focalLength) { this.focalLength = focalLength; }
+
+    public void setMovementSpeed(double speed) { this.movementSpeed = speed; }
+
+    public void setRotationSpeed(double speed) { this.rotationSpeed = speed; }
 }
