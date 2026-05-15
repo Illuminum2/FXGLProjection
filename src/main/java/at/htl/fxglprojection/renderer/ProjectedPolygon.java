@@ -1,8 +1,8 @@
 package at.htl.fxglprojection.renderer;
 
-import at.htl.fxglprojection.objects.Polygon3D;
-
 import java.util.List;
+
+import at.htl.fxglprojection.objects.Polygon3D;
 
 public class ProjectedPolygon {
     private final Polygon3D source;

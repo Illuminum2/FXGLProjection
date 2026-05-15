@@ -54,7 +54,7 @@ public class GeometryPreprocessor {
             Polygon3D processedPolygon = new Polygon3D(v_processed, n_processed, p.getFillColor());
             try {
                 meshData_processed.register(processedPolygon);
-            } catch (DuplicatePolygonException _) {}
+            } catch (DuplicatePolygonException _) {} // Exception is impossible
         }
 
         return meshData_processed;
