@@ -45,11 +45,20 @@ public class GeometryPreprocessor {
         Vec3D scale = transform.getScale();
         double[][] rotation = MathHelper.quaternionToMatrix(transform.getRotationQuat());
 
+        Map<Vec3D, Vec3D> transformedVertices = new HashMap<>();
+
         for (Polygon3D p : meshComp.getMesh().getRegistered()) {
             List<Vec3D> v_processed = new ArrayList<>();
 
             for (Vec3D v : p.getVertices()) {
-                v_processed.add(applyTransform(v, position, scale, rotation));
+                Vec3D transformedVertex = transformedVertices.get(v);
+
+                if (transformedVertex == null) {
+                    transformedVertex = applyTransform(v, position, scale, rotation);
+                    transformedVertices.put(v, transformedVertex);
+                }
+
+                v_processed.add(transformedVertex);
             }
 
             Vec3D n_processed = MathHelper.matrixVectorMultiply(rotation, p.getNormal());
