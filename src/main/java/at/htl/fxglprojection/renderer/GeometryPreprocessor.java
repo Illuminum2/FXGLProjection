@@ -7,7 +7,6 @@ import java.util.Map;
 
 import at.htl.fxglprojection.objects.*;
 import at.htl.fxglprojection.projection.MathHelper;
-import at.htl.fxglprojection.projection.Quaternion;
 import at.htl.fxglprojection.projection.Vec3D;
 
 public class GeometryPreprocessor {
@@ -42,15 +41,16 @@ public class GeometryPreprocessor {
     private static MeshData preprocessMesh(Mesh3DComponent meshComp, Transform3DComponent transform) {
         MeshData meshData_processed = new MeshData();
 
+        List<Boolean> changed = transform.getChanged();
+        Vec3D position = transform.getPosition();
         Vec3D scale = transform.getScale();
         double[][] rotation = MathHelper.quaternionToMatrix(transform.getRotationQuat());
-        Vec3D position = transform.getPosition();
 
         for (Polygon3D p : meshComp.getMesh().getRegistered()) {
             List<Vec3D> v_processed = new ArrayList<>();
 
             for (Vec3D v : p.getVertices()) {
-                v_processed.add(applyTransform(v, scale, rotation, position));
+                v_processed.add(applyTransform(v, changed, position, scale, rotation));
             }
 
             Vec3D n_processed = MathHelper.matrixVectorMultiply(rotation, p.getNormal());
@@ -64,20 +64,29 @@ public class GeometryPreprocessor {
         return meshData_processed;
     }
 
-    private static Vec3D applyTransform(Vec3D v, Vec3D scale, double[][] rotation, Vec3D position) {
-        double x = v.x * scale.x;
-        double y = v.y * scale.y;
-        double z = v.z * scale.z;
+    private static Vec3D applyTransform(Vec3D v, List<Boolean> changed, Vec3D position, Vec3D scale, double[][] rotation) {
+        Vec3D v_processed;
 
-        Vec3D v_processed = new Vec3D(
-                rotation[0][0] * x + rotation[0][1] * y + rotation[0][2] * z,
-                rotation[1][0] * x + rotation[1][1] * y + rotation[1][2] * z,
-                rotation[2][0] * x + rotation[2][1] * y + rotation[2][2] * z
-        );
+        if (changed.get(2))
+            v_processed = new Vec3D(
+                    rotation[0][0] * v.x + rotation[0][1] * v.y + rotation[0][2] * v.z,
+                    rotation[1][0] * v.x + rotation[1][1] * v.y + rotation[1][2] * v.z,
+                    rotation[2][0] * v.x + rotation[2][1] * v.y + rotation[2][2] * v.z
+            );
+        else
+            v_processed = new Vec3D(v.x, v.y, v.z);
 
-        v_processed.x += position.x;
-        v_processed.y += position.y;
-        v_processed.z += position.z;
+        if (changed.get(1) || changed.get(2)) {
+            v_processed.x *= scale.x;
+            v_processed.y *= scale.y;
+            v_processed.z *= scale.z;
+        }
+
+        if (changed.get(0) || changed.get(1) || changed.get(2)) {
+            v_processed.x += position.x;
+            v_processed.y += position.y;
+            v_processed.z += position.z;
+        }
 
         return v_processed;
     }
