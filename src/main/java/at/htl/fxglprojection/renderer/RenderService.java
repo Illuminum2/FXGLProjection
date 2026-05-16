@@ -109,6 +109,15 @@ public class RenderService extends EngineService {
             int size = depth.size();
             return (size % 2 == 0) ? ((depth.get(size / 2 - 1) + depth.get(size / 2)) / 2.0) : depth.get(size / 2);
         }
+        if (depthMode == DepthMode.MID_RANGE) {
+            return (Collections.max(depth) + Collections.min(depth)) / 2;
+        }
+        if (depthMode == DepthMode.WEIGHTED_MID_RANGE) {
+            Double sum = 0.0;
+            for (Double d : depth)
+                sum += d;
+            return (Collections.max(depth) + Collections.min(depth) + sum / depth.size()) / 3;
+        }
         throw new IllegalArgumentException("Illegal depth mode " + depthMode.name() + ".");
     }
 
