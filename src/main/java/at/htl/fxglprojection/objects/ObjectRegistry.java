@@ -1,7 +1,6 @@
 package at.htl.fxglprojection.objects;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class ObjectRegistry {
@@ -40,8 +39,7 @@ public class ObjectRegistry {
     public static List<Mesh3DComponent> getRegistered() {
         changedSinceRead = false;
 
-        // https://www.baeldung.com/java-immutable-list
-        return Collections.unmodifiableList(meshComponents);
+        return List.copyOf(meshComponents);
     }
 
     public static boolean changedSinceRead() {
