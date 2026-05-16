@@ -7,6 +7,7 @@ public class Camera3DProjection {
     private Quaternion quaternion;
 
     private double[][] R;
+    private double[][] R_inv;
 
     private double focalLength;
     private double movementSpeed;
@@ -18,6 +19,7 @@ public class Camera3DProjection {
         this.quaternion = new Quaternion(1, 0, 0, 0);
 
         this.R = new double[][] {{ 1, 0, 0 }, { 0, 1, 0 }, { 0, 0, 1 }};
+        this.R_inv = new double[][] {{ 1, 0, 0 }, { 0, 1, 0 }, { 0, 0, 1 }};
 
         this.focalLength = focalLength;
         this.movementSpeed = movementSpeed;
@@ -33,8 +35,6 @@ public class Camera3DProjection {
         double P1x = p.x - this.position.x;
         double P1y = p.y - this.position.y;
         double P1z = p.z - this.position.z;
-
-        double[][] R_inv = MathHelper.matrixTranspose(R);
 
         double P2x = (R_inv[0][0]*P1x) + (R_inv[0][1]*P1y) + (R_inv[0][2]*P1z);
         double P2y = (R_inv[1][0]*P1x) + (R_inv[1][1]*P1y) + (R_inv[1][2]*P1z);
@@ -81,6 +81,7 @@ public class Camera3DProjection {
 
         this.quaternion = MathHelper.quaternionNormalize(MathHelper.quaternionMultiply(this.quaternion, deltaQ));
         this.R = MathHelper.quaternionToMatrix(this.quaternion);
+        this.R_inv = MathHelper.matrixTranspose(this.R);
     }
 
     public double getX() {
