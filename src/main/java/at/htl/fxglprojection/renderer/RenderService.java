@@ -62,6 +62,12 @@ public class RenderService extends EngineService {
         projectedPolygons.sort(Comparator.comparingDouble(ProjectedPolygon::depth).reversed());
 
         syncNodes(projectedPolygons);
+
+        // Temporary
+        javafx.scene.text.Text  fpsText = new javafx.scene.text.Text();
+        fpsText.setText(Math.round((1.0 / FXGL.tpf())) + " fps");
+        fpsText.setY(10);
+        renderLayer.getChildren().add(fpsText);
     }
 
     @Override
