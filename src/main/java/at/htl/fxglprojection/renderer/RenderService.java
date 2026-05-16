@@ -29,6 +29,11 @@ public class RenderService extends EngineService {
         return camera;
     }
 
+    private ColorMode colorMode = ColorMode.ORIGINAL;
+
+    public ColorMode getColorMode() { return colorMode; }
+    public void setColorMode(ColorMode colorMode) { this.colorMode = colorMode; }
+
     @Override
     public void onInit() {
         if (initialized)
@@ -118,8 +123,26 @@ public class RenderService extends EngineService {
 
     private void updateFxPolygon(Polygon fxPoly, ProjectedPolygon pp) {
         fxPoly.getPoints().setAll(pp.points());
-        //fxPoly.setFill(pp.getSource().getFillColor());
-        fxPoly.setFill(Color.rgb(Math.abs((int) (pp.source().getNormal().x * 255)),Math.abs((int) (pp.source().getNormal().y * 255)), Math.abs((int) (pp.source().getNormal().z * 255))));
+        fxPoly.setFill(calculateColor(pp));
         fxPoly.setStrokeWidth(2);
+    }
+
+    private Color calculateColor(ProjectedPolygon pp) {
+        if (colorMode == ColorMode.ORIGINAL)
+            return pp.source().getFillColor();
+        if (colorMode == ColorMode.NORMALS)
+            return Color.rgb(
+                    Math.abs((int) (pp.source().getNormal().x * 255)),
+                    Math.abs((int) (pp.source().getNormal().y * 255)),
+                    Math.abs((int) (pp.source().getNormal().z * 255))
+            );
+        if (colorMode == ColorMode.QUANTIZED_NORMALS)
+            return Color.rgb(
+                    Math.abs((int) (Math.round(pp.source().getNormal().x) * 255)),
+                    Math.abs((int) (Math.round(pp.source().getNormal().y) * 255)),
+                    Math.abs((int) (Math.round(pp.source().getNormal().z) * 255))
+            );
+
+        throw new IllegalArgumentException("Illegal color mode " + colorMode.name() + ".");
     }
 }
