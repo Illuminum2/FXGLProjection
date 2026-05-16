@@ -71,23 +71,12 @@ public class Camera3DProjection {
     }
 
     public void rotateView(double deltaAngleDegrees, Vec3D axis) {
-        // Fix: Rotation is now relative to camera space not to world space
-        // Transform world space axis to camera space axis by multiplying with the rotation matrix
-        // https://en.wikipedia.org/wiki/Change_of_basis#Example
-        // https://en.wikipedia.org/wiki/Rotation_matrix
-
-        double[] cameraAxis = new double[] {
-                this.R[0][0] * axis.x + this.R[0][1] * axis.y + this.R[0][2] * axis.z,
-                this.R[1][0] * axis.x + this.R[1][1] * axis.y + this.R[1][2] * axis.z,
-                this.R[2][0] * axis.x + this.R[2][1] * axis.y + this.R[2][2] * axis.z
-        };
-
         double deltaAngle = (deltaAngleDegrees * Math.PI / 180) / 2;
         Quaternion deltaQ = new Quaternion(
                 Math.cos(deltaAngle),
-                cameraAxis[0] * Math.sin(deltaAngle),
-                cameraAxis[1] * Math.sin(deltaAngle),
-                cameraAxis[2] * Math.sin(deltaAngle)
+                axis.x * Math.sin(deltaAngle),
+                axis.y * Math.sin(deltaAngle),
+                axis.z * Math.sin(deltaAngle)
         );
 
         this.quaternion = MathHelper.quaternionNormalize(MathHelper.quaternionMultiply(this.quaternion, deltaQ));
