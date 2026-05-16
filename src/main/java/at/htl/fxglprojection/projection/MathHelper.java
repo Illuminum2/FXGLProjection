@@ -36,6 +36,14 @@ public class MathHelper {
 
     // Matrix
 
+    public static Vec3D matrixVectorMultiply(double[][] matrix, Vec3D v) {
+        return new Vec3D(
+                matrix[0][0] * v.x + matrix[0][1] * v.y + matrix[0][2] * v.z,
+                matrix[1][0] * v.x + matrix[1][1] * v.y + matrix[1][2] * v.z,
+                matrix[2][0] * v.x + matrix[2][1] * v.y + matrix[2][2] * v.z
+        );
+    }
+
     public static double[][] matrixTranspose(double[][] matrix) {
         int m = matrix.length;
         int n = matrix[0].length;
