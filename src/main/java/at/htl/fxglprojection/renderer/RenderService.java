@@ -25,14 +25,15 @@ public class RenderService extends EngineService {
 
     private final Camera3DProjection camera = new Camera3DProjection();
 
-    public Camera3DProjection getCamera() {
-        return camera;
-    }
+    public Camera3DProjection getCamera() { return camera; }
 
     private ColorMode colorMode = ColorMode.ORIGINAL;
+    private DepthMode depthMode = DepthMode.AVERAGE;
 
     public ColorMode getColorMode() { return colorMode; }
+    public DepthMode getDepthMode() { return depthMode; }
     public void setColorMode(ColorMode colorMode) { this.colorMode = colorMode; }
+    public void setDepthMode(DepthMode depthMode) { this.depthMode = depthMode; }
 
     @Override
     public void onInit() {
@@ -75,7 +76,7 @@ public class RenderService extends EngineService {
     @Nullable
     private ProjectedPolygon projectPolygon(Polygon3D poly3D) {
         List<Double> points = new ArrayList<>();
-        double depth = 0.0;
+        List<Double> depthList = new ArrayList<>();
 
         for (Vec3D vertex : poly3D.getVertices()) {
             Vec3D projectedPoint = camera.projectPoint(vertex);
@@ -85,10 +86,30 @@ public class RenderService extends EngineService {
 
             points.add(FXGL.getAppWidth() / 2.0 + projectedPoint.x); // Convert camera-plane x to screen x
             points.add(FXGL.getAppHeight() / 2.0 - projectedPoint.y); // Convert camera-plane y to screen y with y-axis pointing up
-            depth += projectedPoint.z;
+
+            depthList.add(projectedPoint.z);
         }
 
-        return new ProjectedPolygon(poly3D, points, depth / (points.size() /2));
+        return new ProjectedPolygon(poly3D, points, calculateDepth(depthList));
+    }
+
+    private double calculateDepth(List<Double> depth) {
+        if (depthMode == DepthMode.MAX)
+            return Collections.max(depth);
+        if (depthMode == DepthMode.MIN)
+            return Collections.min(depth);
+        if (depthMode == DepthMode.AVERAGE) {
+            Double sum = 0.0;
+            for (Double d : depth)
+                sum += d;
+            return sum / depth.size();
+        }
+        if (depthMode == DepthMode.MEDIAN) {
+            depth.sort(Comparator.naturalOrder());
+            int size = depth.size();
+            return (size % 2 == 0) ? ((depth.get(size / 2 - 1) + depth.get(size / 2)) / 2.0) : depth.get(size / 2);
+        }
+        throw new IllegalArgumentException("Illegal depth mode " + depthMode.name() + ".");
     }
 
     private void syncNodes(List<ProjectedPolygon> polygons) {
