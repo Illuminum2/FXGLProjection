@@ -36,17 +36,17 @@ public class ProjectionApp extends GameApplication {
     protected void initInput() {
         Camera3DProjection camera = FXGL.getService(RenderService.class).getCamera();
 
-        FXGL.onKey(KeyCode.W, () -> camera.translatePosition(new Vec3D(0, 0, 1)));
-        FXGL.onKey(KeyCode.S, () -> camera.translatePosition(new Vec3D(0, 0, -1)));
-        FXGL.onKey(KeyCode.A, () -> camera.translatePosition(new Vec3D(-1, 0, 0)));
-        FXGL.onKey(KeyCode.D, () -> camera.translatePosition(new Vec3D(1, 0, 0)));
-        FXGL.onKey(KeyCode.Q, () -> camera.translatePosition(new Vec3D(0, 1, 0)));
-        FXGL.onKey(KeyCode.E, () -> camera.translatePosition(new Vec3D(0, -1, 0)));
+        FXGL.onKey(KeyCode.W, "Move forwards", () -> camera.translatePosition(new Vec3D(0, 0, 1)));
+        FXGL.onKey(KeyCode.S, "Move backwards", () -> camera.translatePosition(new Vec3D(0, 0, -1)));
+        FXGL.onKey(KeyCode.A, "Move left", () -> camera.translatePosition(new Vec3D(-1, 0, 0)));
+        FXGL.onKey(KeyCode.D, "Move right", () -> camera.translatePosition(new Vec3D(1, 0, 0)));
+        FXGL.onKey(KeyCode.Q, "Move up", () -> camera.translatePosition(new Vec3D(0, 1, 0)));
+        FXGL.onKey(KeyCode.E, "Move down", () -> camera.translatePosition(new Vec3D(0, -1, 0)));
 
-        FXGL.onKey(KeyCode.UP, () -> camera.rotateView(new Vec3D(-1, 0, 0)));
-        FXGL.onKey(KeyCode.DOWN, () -> camera.rotateView(new Vec3D(1, 0, 0)));
-        FXGL.onKey(KeyCode.LEFT, () -> camera.rotateView(new Vec3D(0, -1, 0)));
-        FXGL.onKey(KeyCode.RIGHT, () -> camera.rotateView(new Vec3D(0, 1, 0)));
+        FXGL.onKey(KeyCode.UP, "Turn camera up", () -> camera.rotateView(new Vec3D(-1, 0, 0)));
+        FXGL.onKey(KeyCode.DOWN, "Turn camera down", () -> camera.rotateView(new Vec3D(1, 0, 0)));
+        FXGL.onKey(KeyCode.LEFT, "Turn camera left", () -> camera.rotateView(new Vec3D(0, -1, 0)));
+        FXGL.onKey(KeyCode.RIGHT, "Turn camera right", () -> camera.rotateView(new Vec3D(0, 1, 0)));
     }
 
     static void main(String[] args) {
