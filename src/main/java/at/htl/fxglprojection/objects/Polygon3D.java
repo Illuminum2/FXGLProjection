@@ -12,6 +12,7 @@ import at.htl.fxglprojection.projection.Vec3D;
 public class Polygon3D implements Vertices {
     private final List<Vec3D> points;
     private final Vec3D normal; // Only one normal vector because polygon must be flat
+    private final Vec3D center;
 
     // https://github.com/AlmasB/FXGLGames/blob/master/Breakout/src/main/java/com/almasb/fxglgames/breakout/components/BallComponent.java
     private final ObjectProperty<Color> fillColor = new SimpleObjectProperty<>(Color.GREY);
@@ -19,6 +20,7 @@ public class Polygon3D implements Vertices {
     public Polygon3D(List<Vec3D> points, Vec3D normal) {
         this.points = points;
         this.normal = normal;
+        this.center = calculateCenter(points);
     }
 
     public Polygon3D(List<Vec3D> points, Vec3D normal, Color fillColor) {
@@ -41,12 +43,28 @@ public class Polygon3D implements Vertices {
         return points;
     }
 
+    private static Vec3D calculateCenter(List<Vec3D> points) {
+        if (points.isEmpty())
+            return new Vec3D();
+
+        Vec3D sum = new Vec3D();
+
+        for (Vec3D point : points)
+            sum = sum.add(point);
+
+        return sum.divide(points.size());
+    }
+
     public List<Vec3D> getVertices() {
         return Collections.unmodifiableList(points);
     }
 
     public Vec3D getNormal() {
         return normal;
+    }
+
+    public Vec3D getCenter() {
+        return center;
     }
 
     public Color getFillColor() {
