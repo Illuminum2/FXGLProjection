@@ -81,6 +81,9 @@ public class RenderService extends EngineService {
 
     @Nullable
     private ProjectedPolygon projectPolygon(Polygon3D poly3D) {
+        if (isBackFace(poly3D))
+            return null;
+
         List<Double> points = new ArrayList<>();
         List<Double> depthList = new ArrayList<>();
 
@@ -97,6 +100,13 @@ public class RenderService extends EngineService {
         }
 
         return new ProjectedPolygon(poly3D, points, calculateDepth(depthList));
+    }
+
+    private boolean isBackFace(Polygon3D poly3D) {
+        Vec3D center = camera.toCameraSpace(poly3D.getCenter());
+        Vec3D normal = camera.toCameraSpaceDirection(poly3D.getNormal());
+
+        return normal.dot(center) >= 0;
     }
 
     private double calculateDepth(List<Double> depth) {
