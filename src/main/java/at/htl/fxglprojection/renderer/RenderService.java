@@ -1,7 +1,5 @@
 package at.htl.fxglprojection.renderer;
 
-import org.jetbrains.annotations.Nullable;
-
 import java.util.*;
 
 import javafx.scene.text.Text;
@@ -10,10 +8,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.shape.Polygon;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.core.EngineService;
-import static com.almasb.fxgl.dsl.FXGL.getGameScene;
 
 import at.htl.fxglprojection.objects.*;
-import at.htl.fxglprojection.projection.Vec3D;
 import at.htl.fxglprojection.projection.Camera3DProjection;
 
 // Rendering for planar non-intersecting polygons
@@ -21,21 +17,25 @@ import at.htl.fxglprojection.projection.Camera3DProjection;
 public class RenderService extends EngineService {
     private boolean initialized = false;
 
+
     private final Pane renderLayer = new Pane();
     private final Map<Polygon3D, Polygon> polygonNodes = new HashMap<>();
+
 
     private final Camera3DProjection camera = new Camera3DProjection();
 
     public Camera3DProjection getCamera() { return camera; }
+    private final PolygonProjector polygonProjector = new PolygonProjector(camera);
+
 
     private ColorMode colorMode = ColorMode.ORIGINAL;
     private DepthMode depthMode = DepthMode.AVERAGE;
 
     public ColorMode getColorMode() { return colorMode; }
     public DepthMode getDepthMode() { return depthMode; }
-
     public void setColorMode(ColorMode colorMode) { this.colorMode = colorMode; }
     public void setDepthMode(DepthMode depthMode) { this.depthMode = depthMode; }
+
 
     private boolean showFps = true;
     private Text fpsText = new Text();
@@ -44,9 +44,14 @@ public class RenderService extends EngineService {
 
     public boolean getShowFps() { return showFps; }
     public boolean getShowVerticesCount() { return showVerticesCount; }
-
     public void setShowFps(boolean showFps) { this.showFps = showFps; }
     public void setShowVerticesCount(boolean showVerticesCount) { this.showVerticesCount = showVerticesCount; }
+
+
+    private boolean enableBackfaceCulling = true;
+
+    public boolean getEnableBackfaceCulling() { return enableBackfaceCulling; }
+    public void setEnableBackfaceCulling(boolean enableBackfaceCulling) { this.enableBackfaceCulling = enableBackfaceCulling; }
 
     @Override
     public void onInit() {
@@ -56,7 +61,7 @@ public class RenderService extends EngineService {
 
         renderLayer.setMouseTransparent(true);
 
-        getGameScene().getContentRoot().getChildren().add(renderLayer);
+        FXGL.getGameScene().getContentRoot().getChildren().add(renderLayer);
     }
 
     @Override
@@ -65,7 +70,7 @@ public class RenderService extends EngineService {
 
         for (MeshData mesh : GeometryPreprocessor.preprocess()) {
             for (Polygon3D poly : mesh.getRegistered()) {
-                ProjectedPolygon projectedPolygon = projectPolygon(poly);
+                ProjectedPolygon projectedPolygon = polygonProjector.project(poly, depthMode, enableBackfaceCulling);
 
                 if (projectedPolygon != null)
                     projectedPolygons.add(projectedPolygon);
@@ -98,69 +103,10 @@ public class RenderService extends EngineService {
     @Override
     public void onExit() {
         renderLayer.getChildren().clear();
-        getGameScene().getContentRoot().getChildren().remove(renderLayer);
+        FXGL.getGameScene().getContentRoot().getChildren().remove(renderLayer);
         polygonNodes.clear();
 
         initialized = false;
-    }
-
-    @Nullable
-    private ProjectedPolygon projectPolygon(Polygon3D poly3D) {
-        if (isBackFace(poly3D))
-            return null;
-
-        List<Double> points = new ArrayList<>();
-        List<Double> depthList = new ArrayList<>();
-
-        for (Vec3D vertex : poly3D.getVertices()) {
-            Vec3D projectedPoint = camera.projectPoint(vertex);
-
-            if (projectedPoint == null)
-                return null; // Fixes issue with polygons partially behind camera still getting rendered
-
-            // .getWidth() and .getHeight() do not work
-            points.add(FXGL.getSettings().getActualWidth() / 2.0 + projectedPoint.x); // Convert camera-plane x to screen x
-            points.add(FXGL.getSettings().getActualHeight() / 2.0 - projectedPoint.y); // Convert camera-plane y to screen y with y-axis pointing up
-
-            depthList.add(projectedPoint.z);
-        }
-
-        return new ProjectedPolygon(poly3D, points, calculateDepth(depthList));
-    }
-
-    private boolean isBackFace(Polygon3D poly3D) {
-        Vec3D center = camera.toCameraSpace(poly3D.getCenter());
-        Vec3D normal = camera.toCameraSpaceDirection(poly3D.getNormal());
-
-        return normal.dot(center) >= 0;
-    }
-
-    private double calculateDepth(List<Double> depth) {
-        if (depthMode == DepthMode.MAX)
-            return Collections.max(depth);
-        if (depthMode == DepthMode.MIN)
-            return Collections.min(depth);
-        if (depthMode == DepthMode.AVERAGE) {
-            Double sum = 0.0;
-            for (Double d : depth)
-                sum += d;
-            return sum / depth.size();
-        }
-        if (depthMode == DepthMode.MEDIAN) {
-            depth.sort(Comparator.naturalOrder());
-            int size = depth.size();
-            return (size % 2 == 0) ? ((depth.get(size / 2 - 1) + depth.get(size / 2)) / 2.0) : depth.get(size / 2);
-        }
-        if (depthMode == DepthMode.MID_RANGE) {
-            return (Collections.max(depth) + Collections.min(depth)) / 2;
-        }
-        if (depthMode == DepthMode.WEIGHTED_MID_RANGE) {
-            Double sum = 0.0;
-            for (Double d : depth)
-                sum += d;
-            return (Collections.max(depth) + Collections.min(depth) + sum / depth.size()) / 3;
-        }
-        throw new IllegalArgumentException("Illegal depth mode " + depthMode.name() + ".");
     }
 
     private void syncNodes(List<ProjectedPolygon> polygons) {
