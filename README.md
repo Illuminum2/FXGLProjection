@@ -135,3 +135,7 @@ Camera rotation is stores as a quaternion.
 
 - JavaFX node reuse
   - `RenderService` keeps track of existing JavaFX `Polygon` nodes, updating them each frame, and removing them only once they are no longer visible/culled.
+
+## License
+
+This project is licensed under the [MIT License](LICENSE.md).
