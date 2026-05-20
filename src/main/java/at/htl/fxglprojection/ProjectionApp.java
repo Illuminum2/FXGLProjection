@@ -1,11 +1,12 @@
 package at.htl.fxglprojection;
 
+import javafx.scene.input.KeyCode;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.SpawnData;
-import javafx.scene.input.KeyCode;
 
+import at.htl.fxglprojection.objects.ObjectRegistry;
 import at.htl.fxglprojection.objects.ObjectFactory;
 import at.htl.fxglprojection.projection.Vec3D;
 import at.htl.fxglprojection.renderer.RenderService;
@@ -26,10 +27,18 @@ public class ProjectionApp extends GameApplication {
     protected void initGame() {
         FXGL.getGameWorld().addEntityFactory(new ObjectFactory());
 
-        FXGL.spawn("objObject", new SpawnData()
-                .put("filepath", "src/main/resources/at/htl/fxglprojection/chicken.obj")
-                .put("position", new Vec3D(0, -95, 200))
-        );
+        int j = 5;
+        for (int i = 0; i < j; i++) {
+            FXGL.spawn("objObject", new SpawnData()
+                    .put("filepath", "src/main/resources/at/htl/fxglprojection/chicken.obj")
+                    .put("position", new Vec3D(0, -95, 200))
+            );
+
+            ObjectRegistry.getRegistered().get(i).transform3DComponent.setPosition(new Vec3D(0, -95, (60 * j) - 60 - (120 * i)));
+        }
+
+        FXGL.getService(RenderService.class).getCamera().setPosition(new Vec3D(-350, 0, 0));
+        FXGL.getService(RenderService.class).getCamera().rotateView(90, new Vec3D(0, 1, 0));
     }
 
     @Override
