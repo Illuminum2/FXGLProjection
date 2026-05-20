@@ -14,17 +14,15 @@ import at.htl.fxglprojection.projection.Quaternion;
 
 public class ObjectFactory implements EntityFactory {
     @Spawns("objObject")
-    public Entity spawnObj(SpawnData spawnData) {
+    public Entity spawnObj(SpawnData spawnData) throws ObjFormatException {
         if (!spawnData.hasKey("filepath") || !(spawnData.get("filepath") instanceof String))
-            throw new RuntimeException("Missing obj filepath.");
+            throw new ObjFormatException("Missing obj filepath.");
 
         File objFile = new File((String) spawnData.get("filepath"));
         MeshData meshData;
 
         try {
             meshData = ObjParser.parseFile(objFile);
-        } catch (ObjFormatException e) {
-            throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
