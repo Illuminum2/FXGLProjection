@@ -2,6 +2,8 @@ package at.htl.fxglprojection.projection;
 
 import org.jetbrains.annotations.Nullable;
 
+import com.almasb.fxgl.dsl.FXGL;
+
 public class Camera3DProjection {
     private Vec3D position;
     private Quaternion quaternion;
@@ -27,7 +29,7 @@ public class Camera3DProjection {
     }
 
     public Camera3DProjection() {
-        this(new Vec3D(), 289, 2, 1.5);
+        this(new Vec3D(), 289, 256, 180);
     }
 
     @Nullable
@@ -61,13 +63,15 @@ public class Camera3DProjection {
     }
 
     public void translatePosition(double speed, Vec3D m) {
+        speed *= FXGL.tpf();
+
         this.position.x += (this.R[0][0] * speed * m.x) + (this.R[0][1] * speed * m.y) + (this.R[0][2] * speed * m.z);
         this.position.y += (this.R[1][0] * speed * m.x) + (this.R[1][1] * speed * m.y) + (this.R[1][2] * speed * m.z);
         this.position.z += (this.R[2][0] * speed * m.x) + (this.R[2][1] * speed * m.y) + (this.R[2][2] * speed * m.z);
     }
 
     public void rotateView(Vec3D axis) {
-        rotateView(this.rotationSpeed, axis);
+        rotateView(this.rotationSpeed * FXGL.tpf(), axis);
     }
 
     public void rotateView(double deltaAngleDegrees, Vec3D axis) {
