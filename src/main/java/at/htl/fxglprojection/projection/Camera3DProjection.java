@@ -34,24 +34,30 @@ public class Camera3DProjection {
 
     @Nullable
     public Vec3D projectPoint(Vec3D p) {
-        double P1x = p.x - this.position.x;
-        double P1y = p.y - this.position.y;
-        double P1z = p.z - this.position.z;
+        Vec3D pCamera = toCameraSpace(p);
 
-        double P2x = (R_inv[0][0]*P1x) + (R_inv[0][1]*P1y) + (R_inv[0][2]*P1z);
-        double P2y = (R_inv[1][0]*P1x) + (R_inv[1][1]*P1y) + (R_inv[1][2]*P1z);
-        double P2z = (R_inv[2][0]*P1x) + (R_inv[2][1]*P1y) + (R_inv[2][2]*P1z);
-
-        if (P2z > 0) {
+        if (pCamera.z > 0) {
             return new Vec3D(
-                    this.focalLength * P2x / P2z,
-                    this.focalLength * P2y / P2z,
-                    P2z
+                    this.focalLength * pCamera.x / pCamera.z,
+                    this.focalLength * pCamera.y / pCamera.z,
+                    pCamera.z
             );
         }
         else {
             return null;
         }
+    }
+
+    public Vec3D toCameraSpace(Vec3D p) {
+        return toCameraSpaceDirection(p.subtract(this.position));
+    }
+
+    public Vec3D toCameraSpaceDirection(Vec3D v) {
+        return new Vec3D(
+                (R_inv[0][0] * v.x) + (R_inv[0][1] * v.y) + (R_inv[0][2] * v.z),
+                (R_inv[1][0] * v.x) + (R_inv[1][1] * v.y) + (R_inv[1][2] * v.z),
+                (R_inv[2][0] * v.x) + (R_inv[2][1] * v.y) + (R_inv[2][2] * v.z)
+        );
     }
 
     public void setPosition(Vec3D p) {
@@ -83,6 +89,7 @@ public class Camera3DProjection {
                 axis.z * Math.sin(deltaAngle)
         );
 
+        // Post-multiply because the axis is already in camera space.
         this.quaternion = MathHelper.quaternionNormalize(MathHelper.quaternionMultiply(this.quaternion, deltaQ));
         this.R = MathHelper.quaternionToMatrix(this.quaternion);
         this.R_inv = MathHelper.matrixTranspose(this.R);
