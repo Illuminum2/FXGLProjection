@@ -17,6 +17,11 @@ public class ProjectionApp extends GameApplication {
     protected void initSettings(GameSettings settings) {
         settings.setWidth(800);
         settings.setHeight(600);
+
+        // Resizable window
+        settings.setManualResizeEnabled(true);
+        settings.setScaleAffectedOnResize(false);
+
         settings.setTitle("Projection");
         settings.setVersion("0.1");
 

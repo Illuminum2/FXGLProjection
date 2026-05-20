@@ -118,8 +118,9 @@ public class RenderService extends EngineService {
             if (projectedPoint == null)
                 return null; // Fixes issue with polygons partially behind camera still getting rendered
 
-            points.add(FXGL.getAppWidth() / 2.0 + projectedPoint.x); // Convert camera-plane x to screen x
-            points.add(FXGL.getAppHeight() / 2.0 - projectedPoint.y); // Convert camera-plane y to screen y with y-axis pointing up
+            // .getWidth() and .getHeight() do not work
+            points.add(FXGL.getSettings().getActualWidth() / 2.0 + projectedPoint.x); // Convert camera-plane x to screen x
+            points.add(FXGL.getSettings().getActualHeight() / 2.0 - projectedPoint.y); // Convert camera-plane y to screen y with y-axis pointing up
 
             depthList.add(projectedPoint.z);
         }
