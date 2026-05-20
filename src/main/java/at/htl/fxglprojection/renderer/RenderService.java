@@ -4,6 +4,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
+import javafx.scene.text.Text;
 import javafx.scene.paint.Color;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Polygon;
@@ -32,8 +33,20 @@ public class RenderService extends EngineService {
 
     public ColorMode getColorMode() { return colorMode; }
     public DepthMode getDepthMode() { return depthMode; }
+
     public void setColorMode(ColorMode colorMode) { this.colorMode = colorMode; }
     public void setDepthMode(DepthMode depthMode) { this.depthMode = depthMode; }
+
+    private boolean showFps = true;
+    private Text fpsText = new Text();
+    private boolean showVerticesCount = true;
+    private Text verticesCountText = new Text();
+
+    public boolean getShowFps() { return showFps; }
+    public boolean getShowVerticesCount() { return showVerticesCount; }
+
+    public void setShowFps(boolean showFps) { this.showFps = showFps; }
+    public void setShowVerticesCount(boolean showVerticesCount) { this.showVerticesCount = showVerticesCount; }
 
     @Override
     public void onInit() {
@@ -63,11 +76,23 @@ public class RenderService extends EngineService {
 
         syncNodes(projectedPolygons);
 
-        // Temporary
-        javafx.scene.text.Text  fpsText = new javafx.scene.text.Text();
-        fpsText.setText(Math.round((1.0 / FXGL.tpf())) + " fps");
-        fpsText.setY(10);
-        renderLayer.getChildren().add(fpsText);
+        // FPS counter
+        if (showFps) {
+            fpsText.setText(Math.round((1.0 / FXGL.tpf())) + " fps");
+            fpsText.setY(10);
+            renderLayer.getChildren().add(fpsText);
+        } else {
+            renderLayer.getChildren().remove(fpsText);
+        }
+
+        // Vertices counter
+        if (showVerticesCount) {
+            verticesCountText.setText(projectedPolygons.size() + " vertices");
+            verticesCountText.setY(22);
+            renderLayer.getChildren().add(verticesCountText);
+        } else {
+            renderLayer.getChildren().remove(verticesCountText);
+        }
     }
 
     @Override
