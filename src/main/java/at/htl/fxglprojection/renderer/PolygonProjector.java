@@ -28,18 +28,34 @@ public class PolygonProjector {
         List<Double> points = new ArrayList<>();
         List<Double> depthList = new ArrayList<>();
 
+        // .getWidth() and .getHeight() do not work
+        double width = FXGL.getSettings().getActualWidth();
+        double height = FXGL.getSettings().getActualHeight();
+
+        boolean allLeft = true, allRight = true, allAbove = true, allBelow = true;
+
         for (Vec3D vertex : poly3D.getVertices()) {
             Vec3D projectedPoint = camera.projectPoint(vertex);
 
             if (projectedPoint == null)
                 return null; // Fixes issue with polygons partially behind camera still getting rendered
 
-            // .getWidth() and .getHeight() do not work
-            points.add(FXGL.getSettings().getActualWidth() / 2.0 + projectedPoint.x); // Convert camera-plane x to screen x
-            points.add(FXGL.getSettings().getActualHeight() / 2.0 - projectedPoint.y); // Convert camera-plane y to screen y with y-axis pointing up
+            double x = width / 2.0 + projectedPoint.x; // Convert camera-plane x to screen x
+            double y = height / 2.0 - projectedPoint.y; // Convert camera-plane y to screen y with y-axis pointing up
+
+            allLeft &= x < 0;
+            allRight &= x > width;
+            allAbove &= y < 0;
+            allBelow &= y > height;
+
+            points.add(x);
+            points.add(y);
 
             depthList.add(projectedPoint.z);
         }
+
+        if (allLeft || allRight || allAbove || allBelow)
+            return null;
 
         return new ProjectedPolygon(poly3D, points, calculateDepth(depthList, depthMode));
     }

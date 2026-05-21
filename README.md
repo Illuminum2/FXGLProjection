@@ -124,16 +124,19 @@ Camera rotation is stores as a quaternion.
 
 ## Optimizations
 
-- Backface culling
+- **Backface culling:**
   - `PolygonProjector` detects faces pointing away from the camera view direction and stops them from being drawn.
 
-- Processed mesh cache
+- **Frustum culling:**
+  - `PolygonProjector` detects faces outside the camera view and skips their drawing step.
+
+- **Processed mesh cache:**
   - `GeometryPreprocessor` stores processed meshes by `Mesh3DComponent` and recomputes them only when the mesh data or transform changes.
 
-- Shared transformed vertices
+- **Shared transformed vertices:**
   - During preprocessing, repeated source vertices are transformed once and reused across polygons. This matters for OBJ meshes, where many faces share vertices.
 
-- JavaFX node reuse
+- **JavaFX node reuse:**
   - `RenderService` keeps track of existing JavaFX `Polygon` nodes, updating them each frame, and removing them only once they are no longer visible/culled.
 
 ## License
