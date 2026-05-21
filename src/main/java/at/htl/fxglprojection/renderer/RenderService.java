@@ -68,6 +68,7 @@ public class RenderService extends EngineService {
     @Override
     public void onUpdate(double tpf) { // onGameUpdate
         List<ProjectedPolygon> projectedPolygons = new ArrayList<>();
+        polygonProjector.clearVertexCache();
 
         for (MeshData mesh : GeometryPreprocessor.preprocess()) {
             for (Polygon3D poly : mesh.getRegistered()) {
@@ -105,7 +106,8 @@ public class RenderService extends EngineService {
     public void onExit() {
         renderLayer.getChildren().clear();
         FXGL.getGameScene().getContentRoot().getChildren().remove(renderLayer);
-        polygonNodeManager.clear();
+        polygonNodeManager.clearNodes();
+        polygonProjector.clearVertexCache();
 
         initialized = false;
     }

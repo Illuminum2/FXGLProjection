@@ -16,7 +16,7 @@ public class PolygonNodeManager {
         this.renderLayer = renderLayer;
     }
 
-    void clear() {
+    void clearNodes() {
         polygonNodes.clear();
     }
 

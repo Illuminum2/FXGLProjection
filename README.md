@@ -130,6 +130,9 @@ Camera rotation is stores as a quaternion.
 - **Frustum culling:**
   - `PolygonProjector` detects faces outside the camera view and skips their drawing step.
 
+- **Shared projected vertices:**
+    - In `PolygonProjector`, repeated vertices across polygons are cached and projected once.
+
 - **Processed mesh cache:**
   - `GeometryPreprocessor` stores processed meshes by `Mesh3DComponent` and recomputes them only when the mesh data or transform changes.
 
