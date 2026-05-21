@@ -1,22 +1,35 @@
 package at.htl.fxglprojection.objects;
 
-import at.htl.fxglprojection.projection.Vec3D;
-
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
+import at.htl.fxglprojection.projection.Vec3D;
 
 public class ObjParser {
     // https://nullprogram.com/blog/2025/03/02/
     // https://www.scratchapixel.com/lessons/3d-basic-rendering/obj-file-format/obj-file-format.html
-    public static MeshData parseFile(File file) throws IOException, ObjFormatException {
+    public static MeshData parseFile(File file, boolean skipUnsupportedFeatures) throws IOException, ObjFormatException {
         FileReader fr = new FileReader(file);
 
         List<Vec3D> vertices = new ArrayList<>();
         List<Vec3D> normals = new ArrayList<>();
         List<Polygon3D> faces = new ArrayList<>();
+
+        Map<String, String> unsupportedFeatures = Map.of(
+                "vt", "texture coordinate",
+                "vp", "parameter-space vertex",
+                "l", "polyline",
+                "p", "point",
+                "o", "object",
+                "g", "group",
+                "s", "smoothing group",
+                "usemtl", "use material",
+                "mtllib", "material library reference"
+        );
 
         int line = 1;
 
@@ -36,9 +49,9 @@ public class ObjParser {
                     normals.add(parseNormal(tokens));
                 } else if (tokens[0].equals("f")) {
                     faces.add(parseFace(tokens, vertices, normals));
-                } else if (tokens[0].equals("o")) {
-                    throw new ObjFormatException("File contains unsupported object definitions.");
-                } else if (!tokens[0].equals("vt") && !tokens[0].equals("g")) {
+                } else if (!skipUnsupportedFeatures && unsupportedFeatures.containsKey(tokens[0])) {
+                    throw new ObjFormatException("File contains an unsupported " + unsupportedFeatures.get(tokens[0]) + " definition.");
+                } else if (!skipUnsupportedFeatures) {
                     throw new ObjFormatException("Malformed line.");
                 }
             } catch (ObjFormatException e) {

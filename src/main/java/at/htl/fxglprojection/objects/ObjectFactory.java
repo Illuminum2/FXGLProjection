@@ -21,8 +21,10 @@ public class ObjectFactory implements EntityFactory {
         File objFile = new File((String) spawnData.get("filepath"));
         MeshData meshData;
 
+        boolean skipUnsupportedFeatures = (boolean) spawnData.getData().getOrDefault("skipUnsupportedFeatures", false);
+
         try {
-            meshData = ObjParser.parseFile(objFile);
+            meshData = ObjParser.parseFile(objFile, skipUnsupportedFeatures);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -42,44 +44,4 @@ public class ObjectFactory implements EntityFactory {
                 .with(new Mesh3DComponent(meshData))
                 .buildAndAttach();
     }
-
-//    @Spawns("polygon")
-//    public Entity newPolygon(SpawnData data) {
-//        Polygon3D polygon = new Polygon3D(parsePolygonData(data));
-//
-//        return entityBuilder(data)
-//                .type(SHAPE)
-//                //.with(polygon)
-//                .build();
-//    }
-
-//    private List<Vec3D> parsePolygonData(SpawnData data) {
-//        // Tree map sorts by key automatically
-//        Map<Integer, Vec3D> points = new TreeMap<>();
-//
-//        Pattern r = Pattern.compile("^p(\\d+$)");
-//
-//        data.getData().forEach((String key, Object value) -> {
-//            Matcher m = r.matcher(key);
-//
-//            if (value instanceof Vec3D && m.matches()) {
-//                points.put(Integer.parseInt(m.group(1)), (Vec3D) value);
-//            }
-//        });
-//
-//        List<Vec3D> pointList = points.values().stream().toList();
-//
-//        if (data.hasKey("origin") && data.get("origin") instanceof Vec3D) {
-//            Vec3D origin = data.get("origin");
-//
-//            // Normalize to origin
-//            for (Vec3D point : pointList) {
-//                point.x += origin.x;
-//                point.y += origin.y;
-//                point.z += origin.z;
-//            }
-//        }
-//
-//        return pointList;
-//    }
 }

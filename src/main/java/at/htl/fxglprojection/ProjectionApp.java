@@ -32,10 +32,11 @@ public class ProjectionApp extends GameApplication {
     protected void initGame() {
         FXGL.getGameWorld().addEntityFactory(new ObjectFactory());
 
-        int j = 5;
+        int j = 100;
         for (int i = 0; i < j; i++) {
             FXGL.spawn("objObject", new SpawnData()
                     .put("filepath", "src/main/resources/at/htl/fxglprojection/chicken.obj")
+                    .put("skipUnsupportedFeatures", true)
                     .put("position", new Vec3D(0, -95, 200))
             );
 
