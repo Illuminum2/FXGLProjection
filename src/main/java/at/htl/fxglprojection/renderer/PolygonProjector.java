@@ -21,7 +21,7 @@ public class PolygonProjector {
     }
 
     @Nullable
-    public ProjectedPolygon project(Polygon3D poly3D, DepthMode depthMode, boolean enableBackfaceCulling) {
+    public ProjectedPolygon project(Polygon3D poly3D, DepthMode depthMode, boolean enableBackfaceCulling, boolean enableFrustumCulling) {
         if (enableBackfaceCulling && isBackFace(poly3D))
             return null;
 

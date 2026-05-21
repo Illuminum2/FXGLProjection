@@ -47,9 +47,12 @@ public class RenderService extends EngineService {
 
 
     private boolean enableBackfaceCulling = true;
+    private boolean enableFrustumCulling = true;
 
     public boolean getEnableBackfaceCulling() { return enableBackfaceCulling; }
+    public boolean getEnableFrustumCulling() { return enableFrustumCulling; }
     public void setEnableBackfaceCulling(boolean enableBackfaceCulling) { this.enableBackfaceCulling = enableBackfaceCulling; }
+    public void setEnableFrustumCulling(boolean enableFrustumCulling) { this.enableFrustumCulling = enableFrustumCulling; }
 
     @Override
     public void onInit() {
@@ -68,7 +71,7 @@ public class RenderService extends EngineService {
 
         for (MeshData mesh : GeometryPreprocessor.preprocess()) {
             for (Polygon3D poly : mesh.getRegistered()) {
-                ProjectedPolygon projectedPolygon = polygonProjector.project(poly, depthMode, enableBackfaceCulling);
+                ProjectedPolygon projectedPolygon = polygonProjector.project(poly, depthMode, enableBackfaceCulling, enableFrustumCulling);
 
                 if (projectedPolygon != null)
                     projectedPolygons.add(projectedPolygon);
