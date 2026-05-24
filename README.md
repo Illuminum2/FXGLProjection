@@ -133,6 +133,9 @@ Camera rotation is stores as a quaternion.
 - **Shared projected vertices:**
     - In `PolygonProjector`, repeated vertices across polygons are cached and projected once.
 
+- **Mesh asset cache:**
+  - `MeshAssetCache` caches `MeshData` obtained from an OBJ file to prevent repeated parsing.
+
 - **Processed mesh cache:**
   - `GeometryPreprocessor` stores processed meshes by `Mesh3DComponent` and recomputes them only when the mesh data or transform changes.
 

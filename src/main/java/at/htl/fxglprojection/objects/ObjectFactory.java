@@ -24,7 +24,7 @@ public class ObjectFactory implements EntityFactory {
         boolean skipUnsupportedFeatures = (boolean) spawnData.getData().getOrDefault("skipUnsupportedFeatures", false);
 
         try {
-            meshData = ObjParser.parseFile(objFile, skipUnsupportedFeatures);
+            meshData = MeshAssetCache.get(objFile, skipUnsupportedFeatures);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

@@ -13,6 +13,7 @@ public class Polygon3D implements Vertices {
     private final List<Vec3D> points;
     private final Vec3D normal; // Only one normal vector because polygon must be flat
     private final Vec3D center;
+    private boolean immutable = false;
 
     // https://github.com/AlmasB/FXGLGames/blob/master/Breakout/src/main/java/com/almasb/fxglgames/breakout/components/BallComponent.java
     private final ObjectProperty<Color> fillColor = new SimpleObjectProperty<>(Color.GREY);
@@ -72,6 +73,21 @@ public class Polygon3D implements Vertices {
     }
 
     public void setFillColor(Color fillColor) {
+        checkMutable();
+
         this.fillColor.set(fillColor);
+    }
+
+    public boolean isImmutable() {
+        return immutable;
+    }
+
+    void makeImmutable() {
+        immutable = true;
+    }
+
+    private void checkMutable() {
+        if (immutable)
+            throw new UnsupportedOperationException("Polygon data is immutable.");
     }
 }
